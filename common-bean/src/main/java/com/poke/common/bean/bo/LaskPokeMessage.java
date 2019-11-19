@@ -1,0 +1,15 @@
+package com.poke.common.bean.bo;
+
+import lombok.Data;
+
+/**
+ * @author trevor
+ * @date 05/21/19 14:27
+ */
+@Data
+public class LaskPokeMessage {
+
+    private String lastPoke;
+
+    private Integer paiXing;
+}

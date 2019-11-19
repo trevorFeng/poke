@@ -11,6 +11,9 @@
 
     <modules>
         <module>register</module>
+        <module>common-util</module>
+        <module>common-core</module>
+        <module>common-client</module>
     </modules>
 
 
