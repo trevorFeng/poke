@@ -10,37 +10,21 @@ import lombok.Data;
  **/
 @Data
 public class CardConsumRecord {
-
-    /**
-     * 主键id
-     */
-    private Long id;
+    private Integer id;
 
     /**
      * 开房id
      */
-    private Long roomId;
+    private Integer roomId;
 
     /**
      * 开房人的id（用户id）
      */
-    private Long roomAuth;
+    private Integer roomAuth;
 
     /**
      * 消费房卡数量
      */
     private Integer consumNum;
-
-    /**
-     * 生成一个房间房卡消费的基本信息
-     * @param roomRecordId
-     * @param roomAuth
-     * @param consumNum
-     */
-    public void generateCardConsumRecordBase(Long roomRecordId , Long roomAuth ,Integer consumNum){
-        this.setRoomId(roomRecordId);
-        this.setRoomAuth(roomAuth);
-        this.setConsumNum(consumNum);
-    }
 
 }

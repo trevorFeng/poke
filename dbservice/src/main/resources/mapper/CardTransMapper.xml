@@ -1,62 +1,161 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.poke.dbservice.dao.mysql.CardTransMapper">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.poke.dbservice.dao.mysql.CardTransMapper" >
 
-    <insert id="insert">
-        insert into card_trans
-        set
-        card_num=#{cardTrans.cardNum},
-        turn_out_user_name=#{cardTrans.turnOutUserName},
-        turn_out_user_id=#{cardTrans.turnOutUserId},
-        trans_num=#{cardTrans.transNum},
-        turn_out_time=#{cardTrans.turnOutTime},
-        turn_in_user_id=#{cardTrans.turnInUserId},
-        turn_in_time=#{cardTrans.turnInTime},
-        version=#{cardTrans.version}
-    </insert>
+  <resultMap id="BaseResultMap" type="com.poke.common.bean.domain.mysql.CardTrans" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="card_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="turn_out_user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="turn_out_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="trans_num" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="turn_out_time" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="turn_in_user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="turn_in_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="turn_in_time" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="version" jdbcType="TINYINT" javaType="java.lang.Byte" />
+    </constructor>
+  </resultMap>
 
-    <select id="findCardNumByTransNo" resultType="java.lang.Integer">
-        SELECT
-        t.card_num cardNum
-        FROM
-        card_trans t
-        WHERE
-        t.trans_num=#{transNo}
-    </select>
 
-    <update id="closeTrans">
-        update card_trans
-        set
-        turn_in_time=#{turnInTime},
-        turn_in_user_id=#{turnInUserId},
-        turn_in_user_name=#{turnInUserName},
-        version=1
-        WHERE
-        trans_num=#{transNo}
-        AND
-        version=0
-    </update>
+  <sql id="Base_Column_List" >
+    id, card_num, turn_out_user_name, turn_out_user_id, trans_num, turn_out_time, turn_in_user_name, 
+    turn_in_user_id, turn_in_time, version
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from card_trans
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from card_trans
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.poke.common.bean.domain.mysql.CardTrans" >
+    insert into card_trans (id, card_num, turn_out_user_name, 
+      turn_out_user_id, trans_num, turn_out_time, 
+      turn_in_user_name, turn_in_user_id, turn_in_time, 
+      version)
+    values (#{id,jdbcType=INTEGER}, #{cardNum,jdbcType=INTEGER}, #{turnOutUserName,jdbcType=VARCHAR}, 
+      #{turnOutUserId,jdbcType=INTEGER}, #{transNum,jdbcType=VARCHAR}, #{turnOutTime,jdbcType=BIGINT}, 
+      #{turnInUserName,jdbcType=VARCHAR}, #{turnInUserId,jdbcType=INTEGER}, #{turnInTime,jdbcType=BIGINT}, 
+      #{version,jdbcType=TINYINT})
+  </insert>
 
-    <select id="findSendCardRecord" resultType="com.poke.common.bean.domain.mysql.CardTrans">
-        SELECT
-        t.card_num cardNum,
-        t.turn_in_user_id turnInUserId,
-        t.turn_out_time turnOutTime
-        FROM
-        card_trans t
-        WHERE
-        t.turn_out_user_id=#{userId}
-    </select>
+  <insert id="insertSelective" parameterType="com.poke.common.bean.domain.mysql.CardTrans" >
+    insert into card_trans
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cardNum != null" >
+        card_num,
+      </if>
+      <if test="turnOutUserName != null" >
+        turn_out_user_name,
+      </if>
+      <if test="turnOutUserId != null" >
+        turn_out_user_id,
+      </if>
+      <if test="transNum != null" >
+        trans_num,
+      </if>
+      <if test="turnOutTime != null" >
+        turn_out_time,
+      </if>
+      <if test="turnInUserName != null" >
+        turn_in_user_name,
+      </if>
+      <if test="turnInUserId != null" >
+        turn_in_user_id,
+      </if>
+      <if test="turnInTime != null" >
+        turn_in_time,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cardNum != null" >
+        #{cardNum,jdbcType=INTEGER},
+      </if>
+      <if test="turnOutUserName != null" >
+        #{turnOutUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="turnOutUserId != null" >
+        #{turnOutUserId,jdbcType=INTEGER},
+      </if>
+      <if test="transNum != null" >
+        #{transNum,jdbcType=VARCHAR},
+      </if>
+      <if test="turnOutTime != null" >
+        #{turnOutTime,jdbcType=BIGINT},
+      </if>
+      <if test="turnInUserName != null" >
+        #{turnInUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="turnInUserId != null" >
+        #{turnInUserId,jdbcType=INTEGER},
+      </if>
+      <if test="turnInTime != null" >
+        #{turnInTime,jdbcType=BIGINT},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
 
-    <select id="findRecevedCardRecord" resultType="com.poke.common.bean.domain.mysql.CardTrans">
-        SELECT
-        t.card_num cardNum,
-        t.turn_out_user_name turnOutUserName,
-        t.turn_in_time turnInTime
-        FROM
-        card_trans t
-        WHERE
-        t.turn_in_user_id=#{turnInUserId}
-    </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.poke.common.bean.domain.mysql.CardTrans" >
+    update card_trans
+    <set >
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=INTEGER},
+      </if>
+      <if test="turnOutUserName != null" >
+        turn_out_user_name = #{turnOutUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="turnOutUserId != null" >
+        turn_out_user_id = #{turnOutUserId,jdbcType=INTEGER},
+      </if>
+      <if test="transNum != null" >
+        trans_num = #{transNum,jdbcType=VARCHAR},
+      </if>
+      <if test="turnOutTime != null" >
+        turn_out_time = #{turnOutTime,jdbcType=BIGINT},
+      </if>
+      <if test="turnInUserName != null" >
+        turn_in_user_name = #{turnInUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="turnInUserId != null" >
+        turn_in_user_id = #{turnInUserId,jdbcType=INTEGER},
+      </if>
+      <if test="turnInTime != null" >
+        turn_in_time = #{turnInTime,jdbcType=BIGINT},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 
+  <update id="updateByPrimaryKey" parameterType="com.poke.common.bean.domain.mysql.CardTrans" >
+    update card_trans
+    set card_num = #{cardNum,jdbcType=INTEGER},
+      turn_out_user_name = #{turnOutUserName,jdbcType=VARCHAR},
+      turn_out_user_id = #{turnOutUserId,jdbcType=INTEGER},
+      trans_num = #{transNum,jdbcType=VARCHAR},
+      turn_out_time = #{turnOutTime,jdbcType=BIGINT},
+      turn_in_user_name = #{turnInUserName,jdbcType=VARCHAR},
+      turn_in_user_id = #{turnInUserId,jdbcType=INTEGER},
+      turn_in_time = #{turnInTime,jdbcType=BIGINT},
+      version = #{version,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

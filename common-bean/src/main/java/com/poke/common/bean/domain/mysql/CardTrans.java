@@ -2,8 +2,6 @@ package com.poke.common.bean.domain.mysql;
 
 import lombok.Data;
 
-import java.util.UUID;
-
 /**
  * 房卡交易记录
  * @author trevor
@@ -11,11 +9,7 @@ import java.util.UUID;
  */
 @Data
 public class CardTrans {
-
-    /**
-     * 主键id
-     */
-    private Long id;
+    private Integer id;
 
     /**
      * 交易的房卡数量
@@ -30,7 +24,7 @@ public class CardTrans {
     /**
      * 转出玩家id
      */
-    private Long turnOutUserId;
+    private Integer turnOutUserId;
 
     /**
      * 全局唯一的交易号
@@ -45,12 +39,12 @@ public class CardTrans {
     /**
      * 转入时登陆玩家名字
      */
-    private Long turnInUserName;
+    private String turnInUserName;
 
     /**
      * 转入玩家id
      */
-    private Long turnInUserId;
+    private Integer turnInUserId;
 
     /**
      * 转入时间
@@ -60,17 +54,6 @@ public class CardTrans {
     /**
      * 防止同时修改该条记录，房卡多次被领取的情况，初始值为0，每次修改版本号加1,最大值为1
      */
-    private Integer version;
+    private Byte version;
 
-    /**
-     * 生成一个房间交易基本信息
-     */
-    public void generateCardTransBase(User user, Integer cardNum){
-        this.cardNum = cardNum;
-        this.turnOutUserName = user.getAppName();
-        this.turnOutUserId = user.getId();
-        this.turnOutTime = System.currentTimeMillis();
-        this.transNum = UUID.randomUUID().toString() + this.turnOutTime;
-        this.version = 0;
-    }
 }

@@ -2,20 +2,20 @@ package com.poke.dbservice.dao.mysql;
 
 
 import com.poke.common.bean.domain.mysql.CardConsumRecord;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-/**
- * @author trevor
- * @date 2019/3/8 16:23
- */
 @Repository
 public interface CardConsumRecordMapper {
 
+    int deleteByPrimaryKey(Integer id);
 
-    Long insert(@Param("cardConsumRecord") CardConsumRecord cardConsumRecord);
+    int insert(CardConsumRecord record);
 
-    void deleteByRoomIds(@Param("roomRecordIds") List<Long> roomIds);
+    int insertSelective(CardConsumRecord record);
+
+    CardConsumRecord selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(CardConsumRecord record);
+
+    int updateByPrimaryKey(CardConsumRecord record);
 }

@@ -1,24 +1,93 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.poke.dbservice.dao.mysql.CardConsumRecordMapper">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.poke.dbservice.dao.mysql.CardConsumRecordMapper" >
 
-    <insert id="insert">
-        insert into card_consum_record
-        set
-        room_id=#{cardConsumRecord.roomId},
-        room_auth=#{cardConsumRecord.roomAuth},
-        consum_num=#{cardConsumRecord.consumNum}
-    </insert>
+  <resultMap id="BaseResultMap" type="com.poke.common.bean.domain.mysql.CardConsumRecord" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="room_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="room_auth" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="consum_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
 
+  <sql id="Base_Column_List" >
+    id, room_id, room_auth, consum_num
+  </sql>
 
-    <delete id="deleteByRoomIds">
-        delete
-        from
-        card_consum_record
-        where
-        room_id in
-        <foreach collection="roomRecordIds" item="id"  open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from card_consum_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from card_consum_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.poke.common.bean.domain.mysql.CardConsumRecord" >
+    insert into card_consum_record (id, room_id, room_auth, 
+      consum_num)
+    values (#{id,jdbcType=INTEGER}, #{roomId,jdbcType=INTEGER}, #{roomAuth,jdbcType=INTEGER}, 
+      #{consumNum,jdbcType=INTEGER})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.poke.common.bean.domain.mysql.CardConsumRecord" >
+    insert into card_consum_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roomId != null" >
+        room_id,
+      </if>
+      <if test="roomAuth != null" >
+        room_auth,
+      </if>
+      <if test="consumNum != null" >
+        consum_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roomId != null" >
+        #{roomId,jdbcType=INTEGER},
+      </if>
+      <if test="roomAuth != null" >
+        #{roomAuth,jdbcType=INTEGER},
+      </if>
+      <if test="consumNum != null" >
+        #{consumNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.poke.common.bean.domain.mysql.CardConsumRecord" >
+    update card_consum_record
+    <set >
+      <if test="roomId != null" >
+        room_id = #{roomId,jdbcType=INTEGER},
+      </if>
+      <if test="roomAuth != null" >
+        room_auth = #{roomAuth,jdbcType=INTEGER},
+      </if>
+      <if test="consumNum != null" >
+        consum_num = #{consumNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.poke.common.bean.domain.mysql.CardConsumRecord" >
+    update card_consum_record
+    set room_id = #{roomId,jdbcType=INTEGER},
+      room_auth = #{roomAuth,jdbcType=INTEGER},
+      consum_num = #{consumNum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
 </mapper>

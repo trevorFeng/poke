@@ -1,124 +1,175 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.poke.dbservice.dao.mysql.UserMapper">
-    <!-- 查询玩家是否开启好友管理功能,1为是，0为否 -->
-    <select id="isFriendManage" resultType="java.lang.Integer">
-        SELECT friend_manage_flag
-        from `user`
-        WHERE
-        id=#{userId}
-    </select>
+    <resultMap id="BaseResultMap" type="com.poke.common.bean.domain.mysql.User">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="real_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="id_card" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="open_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="hash" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="relation__user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="phone_number" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="app_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="app_picture_url" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte"/>
+            <arg column="friend_manage_flag" jdbcType="TINYINT" javaType="java.lang.Byte"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, real_name, id_card, open_id, hash, relation__user_id, phone_number, app_name, 
+    app_picture_url, type, friend_manage_flag
+    </sql>
 
-    <!-- 根据openid查找用户是否存在 -->
-    <select id="isExistByOpnenId" resultType="java.lang.Long">
-        SELECT count(id)
-        from `user`
-        WHERE
-        open_id=#{openid}
-    </select>
-
-    <!-- 更新用户 -->
-    <update id="updateUser">
-        update `user` SET
-        <if test="user.realName != null and user.realName != ''">
-            real_name=#{user.realName},
-        </if>
-        <if test="user.idCard != null and user.idCard != ''">
-            id_card=#{user.idCard},
-        </if>
-        <if test="user.hash != null and user.hash != ''">
-            hash=#{user.hash},
-        </if>
-        <if test="user.userId != null">
-            user_id=#{user.userId},
-        </if>
-        <if test="user.appName != null and user.appName != ''">
-            app_name=#{user.appName},
-        </if>
-        <if test="user.appPictureUrl != null and user.appPictureUrl != ''">
-            app_picture_url=#{user.appPictureUrl},
-        </if>
-        <if test="user.friendManageFlag != null">
-            friend_manage_flag=#{user.friendManageFlag},
-        </if>
-        <if test="user.phoneNumber != null and user.phoneNumber != ''">
-            phone_number=#{user.phoneNumber},
-        </if>
-        id=id
-        where
-        1=1
-        <if test="user.openid != null">
-            and open_id=#{user.openid}
-        </if>
-        <if test="user.id != null">
-            and id=#{user.id}
-        </if>
-
-    </update>
-
-    <!-- 根据openid查询用户 -->
-    <select id="findUserByOpenid" resultType="com.poke.common.bean.domain.mysql.User">
-        SELECT
-        id id,
-        app_name appName,
-        open_id openid,
-        hash hash,
-        app_picture_url appPictureUrl
-        from `user`
-        WHERE
-        open_id=#{openid}
-    </select>
-
-    <!-- 插入user -->
-    <insert id="insertOne" useGeneratedKeys="true" keyProperty="id">
-        INSERT  INTO
-        `user`(open_id ,hash ,app_name ,app_picture_url ,`type` ,friend_manage_flag)
-        VALUES (#{user.openid} ,#{user.hash} ,#{user.appName} ,#{user.appPictureUrl} ,#{user.type} ,#{user.friendManageFlag})
-    </insert>
-
-    <!-- 根据手机号查询用户是否存在 -->
-    <select id="isExistByPhoneNum" resultType="java.lang.Long">
-        SELECT count(id)
-        from `user`
-        WHERE
-        phone_number=#{phoneNum}
-    </select>
-
-    <!-- 根据phoneNum查询用户，包含id，weixinName，weixinPictureUrl字段 -->
-    <select id="findUserByPhoneNumContainOpenidAndHash" resultType="com.poke.common.bean.domain.mysql.User">
-        SELECT
-        open_id openid,
-        hash hash
-        from `user`
-        WHERE
-        phone_number=#{phoneNum}
-    </select>
-
-    <select id="findUsersByIds" resultType="com.poke.common.bean.domain.mysql.User">
+    <select id="findByOpenid" resultType="com.poke.common.bean.domain.mysql.User" parameterType="java.lang.String">
         select
-        id id,
-        app_name appName,
-        app_picture_url appPictureUrl
-        from
-        `user`
-        where
-        id in
-        <foreach collection="ids" item="id"  open="(" separator="," close=")">
-        #{id}
-        </foreach>
+        <include refid="Base_Column_List"/>
+        from user
+        where open_id = #{openid,jdbcType=VARCHAR}
     </select>
 
-    <select id="findByName" resultType="com.poke.common.bean.domain.mysql.User">
-        SELECT
-        id id,
-        app_name appName,
-        open_id openid,
-        hash hash,
-        app_picture_url appPictureUrl
-        from
-        `user`
-        where
-        app_name = #{name}
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.poke.common.bean.domain.mysql.User">
+    insert into user (id, real_name, id_card, 
+      open_id, hash, relation__user_id, 
+      phone_number, app_name, app_picture_url, 
+      type, friend_manage_flag)
+    values (#{id,jdbcType=INTEGER}, #{realName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{openId,jdbcType=VARCHAR}, #{hash,jdbcType=VARCHAR}, #{relationUserId,jdbcType=INTEGER}, 
+      #{phoneNumber,jdbcType=VARCHAR}, #{appName,jdbcType=VARCHAR}, #{appPictureUrl,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{friendManageFlag,jdbcType=TINYINT})
+  </insert>
+    <insert id="insertSelective" parameterType="com.poke.common.bean.domain.mysql.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="realName != null">
+                real_name,
+            </if>
+            <if test="idCard != null">
+                id_card,
+            </if>
+            <if test="openId != null">
+                open_id,
+            </if>
+            <if test="hash != null">
+                hash,
+            </if>
+            <if test="relationUserId != null">
+                relation__user_id,
+            </if>
+            <if test="phoneNumber != null">
+                phone_number,
+            </if>
+            <if test="appName != null">
+                app_name,
+            </if>
+            <if test="appPictureUrl != null">
+                app_picture_url,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="friendManageFlag != null">
+                friend_manage_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="hash != null">
+                #{hash,jdbcType=VARCHAR},
+            </if>
+            <if test="relationUserId != null">
+                #{relationUserId,jdbcType=INTEGER},
+            </if>
+            <if test="phoneNumber != null">
+                #{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="appName != null">
+                #{appName,jdbcType=VARCHAR},
+            </if>
+            <if test="appPictureUrl != null">
+                #{appPictureUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="friendManageFlag != null">
+                #{friendManageFlag,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.poke.common.bean.domain.mysql.User">
+        update user
+        <set>
+            <if test="realName != null">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                id_card = #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                open_id = #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="hash != null">
+                hash = #{hash,jdbcType=VARCHAR},
+            </if>
+            <if test="relationUserId != null">
+                relation__user_id = #{relationUserId,jdbcType=INTEGER},
+            </if>
+            <if test="phoneNumber != null">
+                phone_number = #{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="appName != null">
+                app_name = #{appName,jdbcType=VARCHAR},
+            </if>
+            <if test="appPictureUrl != null">
+                app_picture_url = #{appPictureUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="friendManageFlag != null">
+                friend_manage_flag = #{friendManageFlag,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.poke.common.bean.domain.mysql.User">
+    update user
+    set real_name = #{realName,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
+      hash = #{hash,jdbcType=VARCHAR},
+      relation__user_id = #{relationUserId,jdbcType=INTEGER},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      app_name = #{appName,jdbcType=VARCHAR},
+      app_picture_url = #{appPictureUrl,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      friend_manage_flag = #{friendManageFlag,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

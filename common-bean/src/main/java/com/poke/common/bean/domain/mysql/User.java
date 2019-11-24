@@ -2,19 +2,10 @@ package com.poke.common.bean.domain.mysql;
 
 import lombok.Data;
 
-/**
- * 一句话描述该类作用:【玩家信息】
- *
- * @author: trevor
- * @create: 2019-03-03 23:14
- **/
 @Data
 public class User {
 
-    /**
-     * id
-     */
-    private Long id;
+    private Integer id;
 
     /**
      * 真实名字
@@ -29,7 +20,7 @@ public class User {
     /**
      * 唯一的openid
      */
-    private String openid;
+    private String openId;
 
     /**
      * hash值
@@ -39,7 +30,7 @@ public class User {
     /**
      * 本表中自关联的userId，实则为同一用户（微信账号和闲聊账号）
      */
-    private Long relationUserId;
+    private Integer relationUserId;
 
     /**
      * 电话号码
@@ -59,11 +50,11 @@ public class User {
     /**
      * 0代表微信，1代表闲聊
      */
-    private Integer type;
+    private Byte type;
 
     /**
      * 是否开启好友管理，1为是，0为否
      */
-    private Integer friendManageFlag;
+    private Byte friendManageFlag;
 
 }

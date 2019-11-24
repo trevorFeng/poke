@@ -11,28 +11,17 @@ import lombok.Data;
 @Data
 public class PersonalConfrontation {
 
-    /**
-     * 主键id
-     */
-    private Long id;
+    private Integer id;
 
-    /**
-     * 玩家的id
-     */
-    private Long userId;
+    private Integer userId;
 
-    /**
-     * 开房记录id
-     */
-    private Long roomId;
+    private Integer roomId;
 
-    /**
-     * 结束时间
-     */
-    private String endTime;
+    private Long endTime;
 
     /**
      * 积分情况
      */
     private Integer integralCondition;
+
 }

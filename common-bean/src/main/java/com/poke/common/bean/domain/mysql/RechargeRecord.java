@@ -3,25 +3,11 @@ package com.poke.common.bean.domain.mysql;
 import lombok.Data;
 
 import java.math.BigDecimal;
-
-/**
- * 一句话描述该类作用:【房卡充值记录】
- *
- * @author: trevor
- * @create: 2019-03-04 22:56
- **/
 @Data
 public class RechargeRecord {
+    private Integer id;
 
-    /**
-     * 主键id
-     */
-    private Long id;
-
-    /**
-     * 玩家id
-     */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 充值房卡数量
