@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient("db-service")
-public interface DbClient {
+@FeignClient("user-service")
+public interface UserServiceClient {
 
     @RequestMapping(value = "/api/user/openid" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     JsonEntity<User> findByOpenid(@RequestParam String openid);
+
 }
