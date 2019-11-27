@@ -1,4 +1,4 @@
-package com.poke.common.util;
+package com.poke.pokeAuth.util;
 
 import com.alibaba.fastjson.JSON;
 import com.trevor.common.bo.WebKeys;

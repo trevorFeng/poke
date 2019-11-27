@@ -15,7 +15,6 @@
         <module>common-core</module>
         <module>common-client</module>
         <module>userService</module>
-        <module>biz</module>
         <module>pokeBiz</module>
         <module>pokeMessage</module>
         <module>pokeAuth</module>

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper {
 
-    User findByOpenid(String openid);
+    User findByOpenidAndUserId(String openid ,Integer userId);
 
     int deleteByPrimaryKey(Integer id);
 

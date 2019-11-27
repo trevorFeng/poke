@@ -21,9 +21,6 @@ import java.util.Objects;
 @Component
 public class AccessFilter extends ZuulFilter {
 
-    @Resource
-    private UserServiceClient userServiceClient;
-
     @Override
     public String filterType() {
         return "pre";
@@ -60,26 +57,21 @@ public class AccessFilter extends ZuulFilter {
             //解析token
             Map<String, Object> claims = TokenUtil.getClaimsFromToken(token);
             String openid = (String) claims.get("openid");
-            String hash = (String) claims.get("hash");
+            String userId = (String) claims.get("userid");
             Long timestamp = (Long) claims.get("timestamp");
 
             //三者必须存在,少一样说明token被篡改
-            if (openid == null || hash == null || timestamp == null) {
+            if (openid == null || userId == null || timestamp == null) {
+                // 过滤该请求，不对其进行路由
                 ctx.setSendZuulResponse(false);
+                // 返回错误码
                 ctx.setResponseStatusCode(401);
+                // 返回错误内容
                 ctx.setResponseBody(JsonUtil.toJsonString(ResponseHelper.createInstanceWithOutData(MessageCodeEnum.TOKEN_ERROR)));
                 return null;
             }
-            //合法才通过
-            User user = userServiceClient.findByOpenid(openid).getData();
-            if (user != null && Objects.equals(hash ,user.getHash())) {
-                return Boolean.TRUE;
-            }else {
-                ctx.setSendZuulResponse(false);
-                ctx.setResponseStatusCode(401);
-                ctx.setResponseBody(JsonUtil.toJsonString(ResponseHelper.createInstanceWithOutData(MessageCodeEnum.TOKEN_ERROR)));
-                return null;
-            }
+            return true;
+
         }
     }
 }

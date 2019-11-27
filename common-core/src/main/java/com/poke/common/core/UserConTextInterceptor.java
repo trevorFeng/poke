@@ -19,7 +19,8 @@ public class UserConTextInterceptor extends HandlerInterceptorAdapter {
         if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
-        String token = request.getHeader(WebKeys.TOKEN);
+        String openid = request.getHeader("openid");
+        String userid = request.getHeader("userid");
         Map<String, Object> claims = TokenUtil.getClaimsFromToken(token);
         String openid = (String) claims.get("openid");
         User user = userServiceClient.findByOpenid(openid).getData();

@@ -14,6 +14,7 @@ public class FeignUserContextInterceptor implements RequestInterceptor {
     public void apply(RequestTemplate requestTemplate) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        requestTemplate.header(WebKeys.TOKEN ,request.getHeader(WebKeys.TOKEN));
+        requestTemplate.header("openid" ,request.getHeader("openid"));
+        requestTemplate.header("userid" ,request.getHeader("userid"));
     }
 }

@@ -21,11 +21,12 @@
     app_picture_url, type, friend_manage_flag
     </sql>
 
-    <select id="findByOpenid" resultType="com.poke.common.bean.domain.mysql.User" parameterType="java.lang.String">
+    <select id="findByOpenidAndUserId" resultType="com.poke.common.bean.domain.mysql.User" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from user
         where open_id = #{openid,jdbcType=VARCHAR}
+        and id = #{userId ,jdbcType=INTEGER}
     </select>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">

@@ -16,10 +16,14 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public User findByOpenid(String openid) {
-        if (StringUtils.isEmpty(openid)) {
-            throw new BizException(500 ,"openid不能为空");
+    public User findByOpenid(String openid ,Integer userId) {
+        if (StringUtils.isEmpty(openid) || userId == null) {
+            throw new BizException(500 ,"openid或userId不能为空");
         }
-        return userMapper.findByOpenid(openid);
+        User user = userMapper.findByOpenidAndUserId(openid, userId);
+        if (user == null) {
+            throw new BizException(500 ,"没有该用户");
+        }
+        return user;
     }
 }

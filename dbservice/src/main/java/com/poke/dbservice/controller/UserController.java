@@ -19,8 +19,8 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @RequestMapping(value = "/api/user/openid" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public JsonEntity<User> findByOpenid(@RequestParam String openid){
+    @RequestMapping(value = "/api/db/user/openid/userid" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<User> findByOpenid(@RequestParam String openid ,@RequestParam Integer userId){
         return ResponseHelper.createInstance(userService.findByOpenid(openid) , MessageCodeEnum.HANDLER_SUCCESS);
     }
 }

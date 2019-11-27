@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService {
     private UserDbClient userDbClient;
 
     @Override
-    public User findByOpenid(String openid) {
+    public User findByOpenid(String openid ,Integer userId) {
         return userDbClient.findByOpenid(openid).getData();
     }
 }
