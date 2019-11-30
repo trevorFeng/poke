@@ -29,6 +29,20 @@
         and id = #{userId ,jdbcType=INTEGER}
     </select>
 
+    <select id="findUsersByIds" resultType="com.poke.common.bean.domain.mysql.User">
+        select
+        id id,
+        app_name appName,
+        app_picture_url appPictureUrl
+        from
+        `user`
+        where
+        id in
+        <foreach collection="ids" item="id"  open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>

@@ -1,13 +1,8 @@
 package com.poke.pokeBiz.controller;
 
 import com.poke.common.bean.bo.JsonEntity;
-import com.poke.common.client.CardTransDbClient;
+import com.poke.common.bean.domain.mysql.CardTrans;
 import com.poke.pokeBiz.service.CardTransService;
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.domain.mysql.CardTrans;
-import com.trevor.common.domain.mysql.User;
-import com.trevor.common.util.ThreadLocalUtil;
-import com.trevor.general.service.CardTransService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -39,9 +34,7 @@ public class CardTransController {
     @ApiImplicitParam(name = "cardNum" ,value = "房卡的数量" , required = true ,paramType = "path" ,dataType = "int")
     @RequestMapping(value = "/api/cardTrans/create/package/{cardNum}", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<String> createCardPackage(@PathVariable("cardNum") @Min(value = 1 ,message = "最小值为1") Integer cardNum){
-        User user = ThreadLocalUtil.getInstance().getUserInfo();
-        JsonEntity<String> jsonEntity = cardTransService.createCardPackage(cardNum , user);
-        ThreadLocalUtil.getInstance().remove();
+        JsonEntity<String> jsonEntity = cardTransService.createCardPackage(cardNum);
         return jsonEntity;
     }
 
@@ -49,27 +42,21 @@ public class CardTransController {
     @ApiImplicitParam(name = "transNo" ,value = "交易号" , required = true ,paramType = "path" ,dataType = "string")
     @RequestMapping(value = "/api/cardTrans/receive/package/{transNo}", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<Object> createCardPackage(@PathVariable("transNo") @NotBlank(message = "交易号不能为空") String transNo){
-        User user = ThreadLocalUtil.getInstance().getUserInfo();
-        JsonEntity<Object> jsonEntity = cardTransService.receiveCardPackage(transNo , user);
-        ThreadLocalUtil.getInstance().remove();
+        JsonEntity<Object> jsonEntity = cardTransService.receiveCardPackage(transNo);
         return jsonEntity;
     }
 
     @ApiOperation(value = "查询发出的房卡")
     @RequestMapping(value = "/api/cardTrans/send/package", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<List<CardTrans>> findSendCardRecord(){
-        User user = ThreadLocalUtil.getInstance().getUserInfo();
-        JsonEntity<List<CardTrans>> jsonEntity = cardTransService.findSendCardRecord(user);
-        ThreadLocalUtil.getInstance().remove();
+        JsonEntity<List<CardTrans>> jsonEntity = cardTransService.findSendCardRecord();
         return jsonEntity;
     }
 
     @ApiOperation(value = "查询收到的房卡")
     @RequestMapping(value = "/api/cardTrans/query/package", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<List<CardTrans>> findRecevedCardRecord(){
-        User user = ThreadLocalUtil.getInstance().getUserInfo();
-        JsonEntity<List<CardTrans>> jsonEntity = cardTransService.findRecevedCardRecord(user);
-        ThreadLocalUtil.getInstance().remove();
+        JsonEntity<List<CardTrans>> jsonEntity = cardTransService.findRecevedCardRecord();
         return jsonEntity;
     }
 

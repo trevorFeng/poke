@@ -70,4 +70,25 @@
       room_card_num = #{roomCardNum,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+  <!-- 根据玩家id更新房卡数量 -->
+  <update id="updatePersonalCardNum">
+        update `personal_card`
+        set
+        room_card_num=#{card}
+        WHERE
+        user_id = #{userId}
+    </update>
+
+  <!-- 根据玩家查询玩家拥有的房卡数量 -->
+  <select id="findCardNumByUserId" resultType="java.lang.Integer">
+      select
+      room_card_num
+      from
+      `personal_card`
+      where
+      user_id = #{userId}
+    </select>
+
 </mapper>

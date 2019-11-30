@@ -4,18 +4,14 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.poke.common.bean.bo.ResponseHelper;
 import com.poke.common.bean.bo.WebKeys;
-import com.poke.common.bean.domain.mysql.User;
 import com.poke.common.bean.enums.MessageCodeEnum;
-import com.poke.common.client.UserServiceClient;
 import com.poke.common.util.JsonUtil;
 import com.poke.common.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Component

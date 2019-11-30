@@ -11,5 +11,30 @@
 
     <artifactId>pokeMessage</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.poke</groupId>
+            <artifactId>common-bean</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- websocket模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <!-- web模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 服务模块 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+    </dependencies>
+
 
 </project>

@@ -1,7 +1,8 @@
 package com.poke.pokeAuth.util;
 
 import com.alibaba.fastjson.JSON;
-import com.trevor.common.bo.WebKeys;
+import com.poke.common.bean.bo.WebKeys;
+import com.poke.common.util.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;
 

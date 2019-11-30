@@ -17,6 +17,12 @@
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.poke</groupId>
+            <artifactId>common-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.poke</groupId>
             <artifactId>common-client</artifactId>

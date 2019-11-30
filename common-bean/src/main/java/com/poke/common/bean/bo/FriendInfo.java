@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class FriendInfo {
 
-    private Long userId;
+    private Integer userId;
 
     private String appName;
 
@@ -19,5 +19,5 @@ public class FriendInfo {
     /**
      * 1通过 ，0为未通过
      */
-    private Integer allowFlag;
+    private Byte allowFlag;
 }

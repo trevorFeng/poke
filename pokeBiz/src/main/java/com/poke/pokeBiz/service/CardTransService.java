@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface CardTransService {
 
-    JsonEntity<String> createCardPackage(Integer cardNum , User user);
+    JsonEntity<String> createCardPackage(Integer cardNum);
 
-    JsonEntity<Object> receiveCardPackage(String transNum , User user);
+    JsonEntity<Object> receiveCardPackage(String transNum);
 
-    JsonEntity<List<CardTrans>> findSendCardRecord(User user);
+    JsonEntity<List<CardTrans>> findSendCardRecord();
 
-    JsonEntity<List<CardTrans>> findRecevedCardRecord(User user);
+    JsonEntity<List<CardTrans>> findRecevedCardRecord();
 }

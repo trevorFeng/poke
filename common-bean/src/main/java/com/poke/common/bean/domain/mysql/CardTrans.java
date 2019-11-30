@@ -9,6 +9,7 @@ import lombok.Data;
  */
 @Data
 public class CardTrans {
+
     private Integer id;
 
     /**

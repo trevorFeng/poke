@@ -12,12 +12,13 @@
       <arg column="total_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
+
   <sql id="Base_Column_List" >
     id, entry_time, room_auth, status, room_type, runing_num, total_num
   </sql>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
+  <include refid="Base_Column_List" />
     from room
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -26,6 +27,8 @@
     delete from room
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
+
   <insert id="insert" parameterType="com.poke.common.bean.domain.mysql.Room" >
     insert into room (id, entry_time, room_auth, 
       status, room_type, runing_num, 
@@ -34,6 +37,7 @@
       #{status,jdbcType=TINYINT}, #{roomType,jdbcType=TINYINT}, #{runingNum,jdbcType=INTEGER}, 
       #{totalNum,jdbcType=INTEGER})
   </insert>
+
   <insert id="insertSelective" parameterType="com.poke.common.bean.domain.mysql.Room" >
     insert into room
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -107,6 +111,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.poke.common.bean.domain.mysql.Room" >
     update room
     set entry_time = #{entryTime,jdbcType=BIGINT},
@@ -117,4 +122,5 @@
       total_num = #{totalNum,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

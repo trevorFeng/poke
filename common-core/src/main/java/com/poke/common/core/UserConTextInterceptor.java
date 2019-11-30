@@ -1,18 +1,19 @@
 package com.poke.common.core;
 
-import com.poke.common.bean.bo.WebKeys;
 import com.poke.common.bean.domain.mysql.User;
-import com.poke.common.client.UserServiceClient;
-import com.poke.common.util.TokenUtil;
+import com.poke.common.client.UserDbClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
+@Component
 public class UserConTextInterceptor extends HandlerInterceptorAdapter {
 
-    private UserServiceClient userServiceClient;
+    @Resource
+    private UserDbClient userDbClient;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -21,9 +22,7 @@ public class UserConTextInterceptor extends HandlerInterceptorAdapter {
         }
         String openid = request.getHeader("openid");
         String userid = request.getHeader("userid");
-        Map<String, Object> claims = TokenUtil.getClaimsFromToken(token);
-        String openid = (String) claims.get("openid");
-        User user = userServiceClient.findByOpenid(openid).getData();
+        User user = userDbClient.findByOpenidAndUserId(openid ,Integer.valueOf(userid)).getData();
         UserContextHolder.set(user);
         return Boolean.TRUE;
     }

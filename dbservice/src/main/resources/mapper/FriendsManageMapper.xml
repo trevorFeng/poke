@@ -22,12 +22,14 @@
     delete from friends_manage
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
   <insert id="insert" parameterType="com.poke.common.bean.domain.mysql.FriendsManage" >
-    insert into friends_manage (id, user_id, manage_friend_id, 
+    insert into friends_manage (user_id, manage_friend_id,
       allow_flag)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{manageFriendId,jdbcType=INTEGER}, 
+    values (#{userId,jdbcType=INTEGER}, #{manageFriendId,jdbcType=INTEGER},
       #{allowFlag,jdbcType=TINYINT})
   </insert>
+
   <insert id="insertSelective" parameterType="com.poke.common.bean.domain.mysql.FriendsManage" >
     insert into friends_manage
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -74,6 +76,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.poke.common.bean.domain.mysql.FriendsManage" >
     update friends_manage
     set user_id = #{userId,jdbcType=INTEGER},
@@ -81,4 +84,29 @@
       allow_flag = #{allowFlag,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="findByUserId" resultType="com.poke.common.bean.domain.mysql.FriendsManage">
+        select
+        distinct
+        manage_friend_id manageFriendId,
+        allow_flag allowFlag
+        from
+        friends_manage
+        where
+        user_id=#{userId}
+    </select>
+
+  <update id="passOrRemoveFriend">
+        update
+        friends_manage
+        set
+        allow_flag=#{friendsManage.allowFlag}
+        where
+        user_id=#{friendsManage.userId}
+        and
+        manage_friend_id=#{friendsManage.manageFriendId}
+    </update>
+
+
+
 </mapper>

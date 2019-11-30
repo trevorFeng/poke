@@ -1,5 +1,6 @@
 package com.poke.pokeBiz.service.impl;
 
+import com.poke.common.bean.bo.BizKeys;
 import com.poke.common.bean.bo.JsonEntity;
 import com.poke.common.bean.bo.ResponseHelper;
 import com.poke.common.bean.domain.mysql.CardTrans;
@@ -7,6 +8,7 @@ import com.poke.common.bean.domain.mysql.User;
 import com.poke.common.bean.enums.MessageCodeEnum;
 import com.poke.common.client.CardTransDbClient;
 import com.poke.common.client.PersonalCardDbClient;
+import com.poke.common.core.UserContextHolder;
 import com.poke.pokeBiz.service.CardTransService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,8 @@ public class CardTransServiceImpl implements CardTransService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JsonEntity<String> createCardPackage(Integer cardNum , User user) {
+    public JsonEntity<String> createCardPackage(Integer cardNum) {
+        User user = UserContextHolder.currentUser();
         //判断玩家房卡数量是否大于交易的房卡数
         Integer cardNumByUserId = personalCardDbClient.findCardNumByUserId(user.getId()).getData();
         if (cardNumByUserId < cardNum) {
@@ -47,9 +50,9 @@ public class CardTransServiceImpl implements CardTransService {
         cardTrans.setTurnOutTime(time);
         cardTrans.setTransNum(UUID.randomUUID().toString() + time);
         cardTrans.setVersion((byte)0);
-        cardTransDbClient.insert(cardTrans);
+        cardTransDbClient.save(cardTrans);
         //减去玩家拥有的房卡数量
-        personalCardMapper.updatePersonalCardNum(user.getId() ,cardNumByUserId - cardNum);
+        personalCardDbClient.updatePersonalCardNum(user.getId() ,cardNumByUserId - cardNum);
         return ResponseHelper.createInstance(cardTrans.getTransNum() ,MessageCodeEnum.CREATE_SUCCESS);
     }
 
@@ -60,16 +63,14 @@ public class CardTransServiceImpl implements CardTransService {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public JsonEntity<Object> receiveCardPackage(String transNum , User user) {
+    public JsonEntity<Object> receiveCardPackage(String transNum) {
+        User user = UserContextHolder.currentUser();
         //将交易关闭
-        Long termNum = cardTransMapper.closeTrans(transNum ,System.currentTimeMillis() , user.getId() , user.getAppName());
-        if (!Objects.equals(BizKeys.ONE_UPDATE ,termNum)) {
-            return ResponseHelper.withErrorInstance(MessageCodeEnum.TRANS_CLOSE);
-        }
+        cardTransDbClient.closeTrans(transNum ,System.currentTimeMillis() ,user.getId() ,user.getAppName());
         //更新玩家房卡
-        Integer cardNum = cardTransMapper.findCardNumByTransNo(transNum);
-        Integer cardNumByUserId = personalCardMapper.findCardNumByUserId(user.getId());
-        personalCardMapper.updatePersonalCardNum(user.getId() ,cardNumByUserId + cardNum);
+        Integer cardNum = cardTransDbClient.findCardNumByTransNo(transNum).getData();
+        Integer cardNumByUserId = personalCardDbClient.findCardNumByUserId(user.getId()).getData();
+        personalCardDbClient.updatePersonalCardNum(user.getId() ,cardNumByUserId + cardNum);
         return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.RECEIVE_SUCCESS);
     }
 
@@ -77,8 +78,9 @@ public class CardTransServiceImpl implements CardTransService {
      * 查询发出的房卡
      * @return
      */
-    public JsonEntity<List<CardTrans>> findSendCardRecord(User user) {
-        List<CardTrans> cardTrans = this.cardTransMapper.findSendCardRecord(user.getId());
+    public JsonEntity<List<CardTrans>> findSendCardRecord() {
+        User user = UserContextHolder.currentUser();
+        List<CardTrans> cardTrans = cardTransDbClient.findSendCardRecord(user.getId()).getData();
         return ResponseHelper.createInstance(cardTrans ,MessageCodeEnum.QUERY_SUCCESS);
     }
 
@@ -86,8 +88,9 @@ public class CardTransServiceImpl implements CardTransService {
      * 查询收到的房卡
      * @return
      */
-    public JsonEntity<List<CardTrans>> findRecevedCardRecord(User user) {
-        List<CardTrans> recevedCardRecord = this.cardTransMapper.findRecevedCardRecord(user.getId());
+    public JsonEntity<List<CardTrans>> findRecevedCardRecord() {
+        User user = UserContextHolder.currentUser();
+        List<CardTrans> recevedCardRecord = cardTransDbClient.findRecevedCardRecord(user.getId()).getData();
         return ResponseHelper.createInstance(recevedCardRecord ,MessageCodeEnum.QUERY_SUCCESS);
     }
 }

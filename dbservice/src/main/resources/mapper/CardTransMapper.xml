@@ -32,12 +32,13 @@
     delete from card_trans
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
   <insert id="insert" parameterType="com.poke.common.bean.domain.mysql.CardTrans" >
-    insert into card_trans (id, card_num, turn_out_user_name, 
+    insert into card_trans (card_num, turn_out_user_name,
       turn_out_user_id, trans_num, turn_out_time, 
       turn_in_user_name, turn_in_user_id, turn_in_time, 
       version)
-    values (#{id,jdbcType=INTEGER}, #{cardNum,jdbcType=INTEGER}, #{turnOutUserName,jdbcType=VARCHAR}, 
+    values (#{cardNum,jdbcType=INTEGER}, #{turnOutUserName,jdbcType=VARCHAR},
       #{turnOutUserId,jdbcType=INTEGER}, #{transNum,jdbcType=VARCHAR}, #{turnOutTime,jdbcType=BIGINT}, 
       #{turnInUserName,jdbcType=VARCHAR}, #{turnInUserId,jdbcType=INTEGER}, #{turnInTime,jdbcType=BIGINT}, 
       #{version,jdbcType=TINYINT})
@@ -158,4 +159,48 @@
       version = #{version,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="closeTrans">
+        update card_trans
+        set
+        turn_in_time=#{turnInTime},
+        turn_in_user_id=#{turnInUserId},
+        turn_in_user_name=#{turnInUserName},
+        version=1
+        WHERE
+        trans_num=#{transNo}
+        AND
+        version=0
+    </update>
+
+  <select id="findCardNumByTransNo" resultType="java.lang.Integer">
+        SELECT
+        t.card_num cardNum
+        FROM
+        card_trans t
+        WHERE
+        t.trans_num=#{transNo}
+    </select>
+
+  <select id="findSendCardRecord" resultType="com.poke.common.bean.domain.mysql.CardTrans">
+        SELECT
+        t.card_num cardNum,
+        t.turn_in_user_id turnInUserId,
+        t.turn_out_time turnOutTime
+        FROM
+        card_trans t
+        WHERE
+        t.turn_out_user_id=#{userId}
+    </select>
+
+  <select id="findRecevedCardRecord" resultType="com.poke.common.bean.domain.mysql.CardTrans">
+        SELECT
+        t.card_num cardNum,
+        t.turn_out_user_name turnOutUserName,
+        t.turn_in_time turnInTime
+        FROM
+        card_trans t
+        WHERE
+        t.turn_in_user_id=#{turnInUserId}
+    </select>
 </mapper>
