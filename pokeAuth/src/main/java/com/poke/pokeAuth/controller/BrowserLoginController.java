@@ -1,19 +1,20 @@
 package com.poke.pokeAuth.controller;
 
-import com.trevor.auth.bo.PhoneCode;
-import com.trevor.auth.service.BrowserLoginService;
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.bo.ResponseHelper;
-import com.trevor.common.domain.mysql.User;
-import com.trevor.common.enums.MessageCodeEnum;
-import com.trevor.common.service.RedisService;
-import com.trevor.common.util.TokenUtil;
+import com.poke.common.bean.bo.JsonEntity;
+import com.poke.common.bean.bo.ResponseHelper;
+import com.poke.common.bean.domain.mysql.User;
+import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.common.util.TokenUtil;
+import com.poke.pokeAuth.bo.PhoneCode;
+import com.poke.pokeAuth.service.BrowserLoginService;
+import com.poke.pokeAuth.service.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +73,7 @@ BrowserLoginController {
             User user = result.getData();
             Map<String, Object> claims = new HashMap<>(2<<4);
             claims.put("hash", user.getHash());
-            claims.put("openid", user.getOpenid());
+            claims.put("openid", user.getOpenId());
             claims.put("timestamp", System.currentTimeMillis());
             String token = TokenUtil.generateToken(claims);
             return ResponseHelper.createInstance(token ,MessageCodeEnum.AUTH_SUCCESS);

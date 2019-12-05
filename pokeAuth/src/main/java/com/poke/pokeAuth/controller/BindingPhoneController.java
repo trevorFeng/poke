@@ -4,14 +4,11 @@ package com.poke.pokeAuth.controller;
 import com.poke.common.bean.bo.JsonEntity;
 import com.poke.common.bean.bo.ResponseHelper;
 import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.pokeAuth.service.BindingPhoneService;
+import com.poke.pokeAuth.service.BrowserLoginService;
+import com.poke.pokeAuth.service.RedisService;
 import com.trevor.auth.bo.PhoneCode;
-import com.trevor.auth.service.BindingPhoneService;
-import com.trevor.auth.service.BrowserLoginService;
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.bo.ResponseHelper;
 import com.trevor.common.domain.mysql.User;
-import com.trevor.common.enums.MessageCodeEnum;
-import com.trevor.common.service.RedisService;
 import com.trevor.common.util.ThreadLocalUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -19,10 +16,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -57,11 +51,11 @@ public class BindingPhoneController {
     @ApiImplicitParam(name = "phoneNum" ,value = "phoneNum" , required = true ,paramType = "path" ,dataType = "string")
     @RequestMapping(value = "/api/binding/phone/{phoneNum}", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<String> bindPhoneNum(@PathVariable("phoneNum") @Pattern(regexp = "^[0-9]{11}$" ,message = "手机号格式不正确") String phoneNum){
-//        JsonEntity<String> stringJsonEntity = browserLoginService.generatePhoneCode(phoneNum);
-//        if (stringJsonEntity.getCode() < 0) {
-//            return stringJsonEntity;
-//        }
-//        String code = stringJsonEntity.getData();
+        JsonEntity<String> stringJsonEntity = browserLoginService.generatePhoneCode(phoneNum);
+        if (stringJsonEntity.getCode() < 0) {
+            return stringJsonEntity;
+        }
+        String code = stringJsonEntity.getData();
         redisService.setValueWithExpire(phoneNum ,"123456" ,60*5L , TimeUnit.SECONDS);
         return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.SEND_MESSAGE);
     }

@@ -2,6 +2,10 @@ package com.poke.pokeMessage.core.event.niuniu;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.poke.pokeMessage.bo.RoomData;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
 import com.trevor.common.bo.PaiXing;
 import com.trevor.common.bo.Player;
 import com.trevor.common.bo.RedisConstant;
@@ -49,15 +53,15 @@ public class JoinRoomEvent extends BaseEvent implements Event {
             return;
         }
 
-        String playerId = task.getPlayId();
-        String roomId = task.getRoomId();
+        Integer playerId = task.getPlayId();
+        Integer roomId = task.getRoomId();
         Set<String> players = data.getPlayers();
         Map<String, Integer> totalScoreMap = data.getTotalScoreMap();
 
         //加入定时刷消息的socketMap
         socketService.join(socket);
         //删除自己的消息队列
-        redisService.delete(RedisConstant.MESSAGES_QUEUE + playerId);
+        gameCore.removeMessageQueue(playerId);
 
         //不是吃瓜群众则加入到真正的玩家集合中并且删除自己的掉线状态
         Set<String> disConnections = data.getDisConnections();

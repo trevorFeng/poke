@@ -1,5 +1,7 @@
 package com.poke.pokeMessage.socket;
 
+import com.poke.pokeMessage.core.GameCore;
+import com.poke.pokeMessage.core.TaskQueue;
 import com.trevor.common.dao.mysql.FriendManageMapper;
 import com.trevor.common.service.RedisService;
 import com.trevor.common.service.RoomService;
@@ -17,6 +19,8 @@ import javax.annotation.Resource;
  */
 @Component
 public class BaseServer {
+
+    protected GameCore gameCore;
 
     protected static UserService userService;
 

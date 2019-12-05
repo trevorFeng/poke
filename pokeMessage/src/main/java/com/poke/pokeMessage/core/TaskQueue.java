@@ -1,8 +1,8 @@
 package com.poke.pokeMessage.core;
 
 import com.google.common.collect.Maps;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.thread.TaskThread;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.thread.TaskThread;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

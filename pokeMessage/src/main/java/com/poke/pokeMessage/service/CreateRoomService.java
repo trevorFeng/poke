@@ -1,5 +1,14 @@
 package com.poke.pokeMessage.service;
 
+import com.poke.common.bean.bo.JsonEntity;
+import com.poke.common.bean.bo.ResponseHelper;
+import com.poke.common.bean.domain.mongo.NiuniuRoomParam;
+import com.poke.common.bean.domain.mysql.Room;
+import com.poke.common.bean.enums.ConsumCardEnum;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.pokeMessage.bo.NiuniuData;
+import com.poke.pokeMessage.core.GameCore;
 import com.trevor.common.bo.JsonEntity;
 import com.trevor.common.bo.ResponseHelper;
 import com.trevor.common.dao.mongo.NiuniuRoomParamMapper;
@@ -45,7 +54,7 @@ public class CreateRoomService {
 
     @Transactional(rollbackFor = Exception.class)
     public JsonEntity<Long> createRoom(NiuniuRoomParam niuniuRoomParam, String userId) {
-        Long playerId = Long.valueOf(userId);
+        Integer playerId = Integer.valueOf(userId);
         //判断玩家拥有的房卡数量是否超过消耗的房卡数
         Integer cardNumByUserId = personalCardMapper.findCardNumByUserId(playerId);
         Integer consumCardNum;
@@ -69,7 +78,12 @@ public class CreateRoomService {
         }
         Long currentTime = System.currentTimeMillis();
         Room room = new Room();
-        room.generateRoomBase(niuniuRoomParam.getRoomType(), playerId, currentTime, totalNum);
+        room.setRoomType(niuniuRoomParam.getRoomType().byteValue());
+        room.setRoomAuth(playerId);
+        room.setEntryTime(currentTime);
+        room.setRuningNum(0);
+        room.setTotalNum(totalNum);
+        room.setStatus((byte)0);
         roomMapper.insertOne(room);
 
         //插入mongoDB

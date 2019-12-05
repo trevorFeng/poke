@@ -1,5 +1,13 @@
 package com.poke.pokeAuth.service;
 
+import com.poke.common.bean.bo.JsonEntity;
+import com.poke.common.bean.bo.ResponseHelper;
+import com.poke.common.bean.bo.WebKeys;
+import com.poke.common.bean.domain.mysql.PersonalCard;
+import com.poke.common.bean.domain.mysql.User;
+import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.common.util.RandomUtils;
+import com.poke.pokeAuth.util.XianliaoAuthUtils;
 import com.trevor.common.bo.JsonEntity;
 import com.trevor.common.bo.ResponseHelper;
 import com.trevor.common.bo.WebKeys;
@@ -64,12 +72,12 @@ public class XianliaoService{
                 //新增
                 String hash = RandomUtils.getRandomChars(10);
                 User user = new User();
-                user.setOpenid(userInfoMap.get(WebKeys.OPEN_ID));
+                user.setOpenId(userInfoMap.get(WebKeys.OPEN_ID));
                 user.setAppName(userInfoMap.get("nickName"));
                 user.setAppPictureUrl(userInfoMap.get("smallAvatar"));
                 user.setHash(hash);
-                user.setType(1);
-                user.setFriendManageFlag(0);
+                user.setType((byte)1);
+                user.setFriendManageFlag((byte)0);
                 userService.insertOne(user);
                 //新增用户房卡记录
                 PersonalCard personalCard = new PersonalCard();

@@ -4,6 +4,7 @@ import com.poke.common.bean.bo.SocketResult;
 import com.poke.common.bean.bo.WebKeys;
 import com.poke.common.bean.domain.mysql.Room;
 import com.poke.common.bean.domain.mysql.User;
+import com.poke.common.util.JsonUtil;
 import com.poke.pokeMessage.bo.SocketMessage;
 import com.poke.pokeMessage.bo.Task;
 import com.poke.pokeMessage.socket.BaseServer;
@@ -47,9 +48,9 @@ public class NiuniuSocket extends BaseServer {
 
     public Session session;
 
-    public String userId;
+    public Integer userId;
 
-    public String roomId;
+    public Integer roomId;
 
     /**
      * 连接建立成功调用的方法
@@ -57,7 +58,7 @@ public class NiuniuSocket extends BaseServer {
      * @param session
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("roomId") String roomId) {
+    public void onOpen(Session session, @PathParam("roomId") Integer roomId) {
         //roomId合法性检查
         Room room = roomService.findOneById(Long.valueOf(roomId));
         if (room == null) {
@@ -88,7 +89,7 @@ public class NiuniuSocket extends BaseServer {
         //设置最大不活跃时间
         session.setMaxIdleTimeout(1000 * 60 * 45);
         this.roomId = roomId;
-        this.userId = user.getId().toString();
+        this.userId = user.getId();
         this.session = session;
 
         //是否开通好友管理功能
@@ -125,8 +126,8 @@ public class NiuniuSocket extends BaseServer {
      */
     @OnClose
     public void onClose() {
-        if (!ObjectUtil.isEmpty(userId)) {
-            redisService.delete(RedisConstant.MESSAGES_QUEUE + userId);
+        if (userId == null) {
+            gameCore.removeMessageQueue(userId);
             Task task = Task.getNiuniuDisConnection(roomId, userId);
             taskQueue.addTask(roomId, task);
         }
@@ -146,7 +147,7 @@ public class NiuniuSocket extends BaseServer {
      * @param pack
      */
     public void sendMessage(SocketResult pack) {
-        redisService.listRightPush(RedisConstant.MESSAGES_QUEUE + userId, JsonUtil.toJsonString(pack));
+        gameCore.addSocketMessage(userId , JsonUtil.toJsonString(pack));
     }
 
     /**
@@ -168,7 +169,7 @@ public class NiuniuSocket extends BaseServer {
      */
     public void flush() {
         try {
-            List<String> messages = redisService.getListMembersAndDelete(RedisConstant.MESSAGES_QUEUE + userId);
+            List<String> messages = gameCore.getFiveMessage(userId);
             if (!messages.isEmpty()) {
                 StringBuffer stringBuffer = new StringBuffer("[");
                 for (String mess : messages) {

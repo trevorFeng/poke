@@ -1,5 +1,9 @@
 package com.poke.pokeMessage.core.event;
 
+import com.poke.pokeMessage.core.GameCore;
+import com.poke.pokeMessage.core.TaskQueue;
+import com.poke.pokeMessage.core.schedule.ScheduleDispatch;
+import com.poke.pokeMessage.service.SocketService;
 import com.trevor.common.dao.mongo.PlayerResultMapper;
 import com.trevor.common.dao.mysql.RoomMapper;
 import com.trevor.common.service.RedisService;
@@ -15,7 +19,7 @@ import javax.annotation.Resource;
 public class BaseEvent {
 
     @Resource
-    protected RedisService redisService;
+    protected GameCore gameCore;
 
     @Resource
     protected SocketService socketService;

@@ -18,7 +18,7 @@ public class NiuniuRoomParam {
     /**
      * 房间id
      */
-    private Long roomId;
+    private Integer roomId;
 
     /**
      * 1为13人牛牛，2为10人牛牛，3为6人牛牛

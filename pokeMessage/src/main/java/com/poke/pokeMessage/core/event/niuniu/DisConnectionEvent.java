@@ -1,11 +1,11 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
-import com.trevor.common.bo.SocketResult;
-import com.trevor.message.bo.NiuniuData;
-import com.trevor.message.bo.RoomData;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.pokeMessage.bo.NiuniuData;
+import com.poke.pokeMessage.bo.RoomData;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;

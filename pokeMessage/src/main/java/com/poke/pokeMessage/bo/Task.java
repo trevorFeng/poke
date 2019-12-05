@@ -11,7 +11,7 @@ public class Task {
     /**
      * 房间id
      */
-    private String roomId;
+    private Integer roomId;
 
 
     /**
@@ -23,7 +23,7 @@ public class Task {
     /**
      * 玩家id
      */
-    private String playId;
+    private Integer playId;
 
     /**
      * 搶莊的倍數
@@ -88,7 +88,7 @@ public class Task {
      * @param playerId
      * @return
      */
-    public static Task getNiuniuDisConnection(String roomId, String playerId) {
+    public static Task getNiuniuDisConnection(Integer roomId, Integer playerId) {
         Task task = new Task();
         task.roomId = roomId;
         task.playId = playerId;
@@ -107,7 +107,7 @@ public class Task {
      * @param joinUser
      * @return
      */
-    public static Task getNiuniuJoinRoom(String roomId, Boolean isFriendManage, Boolean roomAuthFriendAllow, NiuniuSocket socket, User joinUser) {
+    public static Task getNiuniuJoinRoom(Integer roomId, Boolean isFriendManage, Boolean roomAuthFriendAllow, NiuniuSocket socket, User joinUser) {
         Task task = new Task();
         task.roomId = roomId;
         task.flag = TaskFlag.JOIN_ROOM;

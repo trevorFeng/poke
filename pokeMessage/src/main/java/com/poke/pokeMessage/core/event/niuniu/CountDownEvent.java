@@ -1,5 +1,10 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
+import com.poke.pokeMessage.bo.NiuniuData;
+import com.poke.pokeMessage.bo.RoomData;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
 import com.trevor.common.bo.SocketResult;
 import com.trevor.common.enums.GameStatusEnum;
 import com.trevor.message.bo.*;
@@ -17,7 +22,7 @@ public class CountDownEvent extends BaseEvent implements Event {
 
     @Override
     public void execute(RoomData roomData, Task task) {
-        String roomId = task.getRoomId();
+        Integer roomId = task.getRoomId();
         NiuniuData data = (NiuniuData) roomData;
 
         SocketResult socketResult = new SocketResult();

@@ -1,5 +1,7 @@
 package com.poke.pokeMessage.service;
 
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.pokeMessage.socket.socketImpl.NiuniuSocket;
 import com.trevor.common.bo.RedisConstant;
 import com.trevor.common.bo.SocketResult;
 import com.trevor.common.service.RedisService;

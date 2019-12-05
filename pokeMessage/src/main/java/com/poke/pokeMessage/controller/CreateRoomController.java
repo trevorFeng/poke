@@ -1,9 +1,10 @@
 package com.poke.pokeMessage.controller;
 
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.domain.mongo.NiuniuRoomParam;
-import com.trevor.message.service.CreateRoomService;
+import com.poke.common.bean.bo.JsonEntity;
+import com.poke.common.bean.domain.mongo.NiuniuRoomParam;
+import com.poke.pokeMessage.service.CreateRoomService;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 

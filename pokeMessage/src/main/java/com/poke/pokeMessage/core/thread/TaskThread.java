@@ -1,8 +1,8 @@
 package com.poke.pokeMessage.core.thread;
 
 
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.GameCore;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.GameCore;
 
 public class TaskThread implements Runnable {
 
