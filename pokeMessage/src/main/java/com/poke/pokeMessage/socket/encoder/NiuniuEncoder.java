@@ -1,7 +1,7 @@
 package com.poke.pokeMessage.socket.encoder;
 
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.util.JsonUtil;
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.util.JsonUtil;
 
 import javax.websocket.EndpointConfig;
 

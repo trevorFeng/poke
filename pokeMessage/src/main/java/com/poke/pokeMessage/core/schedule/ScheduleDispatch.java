@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ScheduleDispatch {
 
 
-    private ConcurrentHashMap<String, CountDownListener> listeners = new ConcurrentHashMap<>(2 << 7);
+    private ConcurrentHashMap<Integer, CountDownListener> listeners = new ConcurrentHashMap<>(2 << 7);
 
     /**
      * 添加事件
@@ -31,7 +31,7 @@ public class ScheduleDispatch {
      *
      * @param key
      */
-    public void removeCountDown(String key) {
+    public void removeCountDown(Integer key) {
         listeners.remove(key);
     }
 

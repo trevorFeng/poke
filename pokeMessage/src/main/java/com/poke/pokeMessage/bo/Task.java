@@ -1,8 +1,8 @@
 package com.poke.pokeMessage.bo;
 
-import com.trevor.common.domain.mysql.User;
-import com.trevor.message.socket.BaseServer;
-import com.trevor.message.socket.socketImpl.NiuniuSocket;
+import com.poke.common.bean.domain.mysql.User;
+import com.poke.pokeMessage.socket.BaseServer;
+import com.poke.pokeMessage.socket.socketImpl.NiuniuSocket;
 import lombok.Data;
 
 @Data
@@ -73,7 +73,7 @@ public class Task {
      * @param playerId
      * @return
      */
-    public static Task getLeave(String roomId, String playerId) {
+    public static Task getLeave(Integer roomId, Integer playerId) {
         Task task = new Task();
         task.roomId = roomId;
         task.playId = playerId;
@@ -111,7 +111,7 @@ public class Task {
         Task task = new Task();
         task.roomId = roomId;
         task.flag = TaskFlag.JOIN_ROOM;
-        task.playId = String.valueOf(joinUser.getId());
+        task.playId = joinUser.getId();
         task.isFriendManage = isFriendManage;
         task.roomAuthFriendAllow = roomAuthFriendAllow;
         task.socket = socket;
@@ -125,7 +125,7 @@ public class Task {
      * @param roomId
      * @return
      */
-    public static Task getNiuniuReady(String roomId, String userId) {
+    public static Task getNiuniuReady(Integer roomId, Integer userId) {
         Task task = new Task();
         task.flag = TaskFlag.READY;
         task.roomId = roomId;
@@ -138,7 +138,7 @@ public class Task {
      * @param roomId
      * @return
      */
-    public static Task getNiuniuCountDown(Integer time, String roomId, String niuniuCountDownFg ,Integer totalCountDown) {
+    public static Task getNiuniuCountDown(Integer time, Integer roomId, String niuniuCountDownFg ,Integer totalCountDown) {
         Task task = new Task();
         task.roomId = roomId;
         task.countDown = time;
@@ -149,28 +149,28 @@ public class Task {
     }
 
 
-    public static Task getNiuniuFaPai4(String roomId) {
+    public static Task getNiuniuFaPai4(Integer roomId) {
         Task task = new Task();
         task.roomId = roomId;
         task.flag = TaskFlag.FA_PAI_4;
         return task;
     }
 
-    public static Task getNiuniuDefaultXiaZhu(String roomId) {
+    public static Task getNiuniuDefaultXiaZhu(Integer roomId) {
         Task task = new Task();
         task.roomId = roomId;
         task.flag = TaskFlag.DEFAULT_XIA_ZHU;
         return task;
     }
 
-    public static Task getNiuniuFaPai1(String roomId) {
+    public static Task getNiuniuFaPai1(Integer roomId) {
         Task task = new Task();
         task.roomId = roomId;
         task.flag = TaskFlag.FA_PAI_1;
         return task;
     }
 
-    public static Task getNiuniuQiangZhuang(String roomId, String userId, Integer qiangZhuangBeiShu) {
+    public static Task getNiuniuQiangZhuang(Integer roomId, Integer userId, Integer qiangZhuangBeiShu) {
         Task task = new Task();
         task.roomId = roomId;
         task.playId = userId;
@@ -179,14 +179,14 @@ public class Task {
         return task;
     }
 
-    public static Task getNiuniuSelectZhuangJia(String roomId) {
+    public static Task getNiuniuSelectZhuangJia(Integer roomId) {
         Task task = new Task();
         task.roomId = roomId;
         task.flag = TaskFlag.SELECT_ZHUANG_JIA;
         return task;
     }
 
-    public static Task getNiuniuXiaZhu(String roomId, String userId, Integer xiaZhuBeiShu) {
+    public static Task getNiuniuXiaZhu(Integer roomId, Integer userId, Integer xiaZhuBeiShu) {
         Task task = new Task();
         task.roomId = roomId;
         task.playId = userId;
@@ -195,7 +195,7 @@ public class Task {
         return task;
     }
 
-    public static Task getNiuniuTanPai(String roomId, String userId) {
+    public static Task getNiuniuTanPai(Integer roomId, Integer userId) {
         Task task = new Task();
         task.roomId = roomId;
         task.playId = userId;
@@ -203,7 +203,7 @@ public class Task {
         return task;
     }
 
-    public static Task getStopOrContinue(String roomId) {
+    public static Task getStopOrContinue(Integer roomId) {
         Task task = new Task();
         task.roomId = roomId;
         task.flag = TaskFlag.STOP_OR_CONTINUE;

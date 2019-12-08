@@ -2,24 +2,17 @@ package com.poke.pokeMessage.core.event.niuniu;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.poke.common.bean.bo.PaiXing;
+import com.poke.common.bean.bo.Player;
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.bean.domain.mysql.User;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.pokeMessage.bo.NiuniuData;
 import com.poke.pokeMessage.bo.RoomData;
 import com.poke.pokeMessage.bo.Task;
 import com.poke.pokeMessage.core.event.BaseEvent;
 import com.poke.pokeMessage.core.event.Event;
-import com.trevor.common.bo.PaiXing;
-import com.trevor.common.bo.Player;
-import com.trevor.common.bo.RedisConstant;
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.domain.mysql.User;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.common.enums.RoomTypeEnum;
-import com.trevor.common.enums.SpecialEnum;
-import com.trevor.message.bo.NiuniuData;
-import com.trevor.message.bo.RoomData;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
-import com.trevor.message.socket.socketImpl.NiuniuSocket;
+import com.poke.pokeMessage.socket.socketImpl.NiuniuSocket;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -55,7 +48,7 @@ public class JoinRoomEvent extends BaseEvent implements Event {
 
         Integer playerId = task.getPlayId();
         Integer roomId = task.getRoomId();
-        Set<String> players = data.getPlayers();
+        Set<Integer> players = data.getPlayers();
         Map<String, Integer> totalScoreMap = data.getTotalScoreMap();
 
         //加入定时刷消息的socketMap
@@ -64,7 +57,7 @@ public class JoinRoomEvent extends BaseEvent implements Event {
         gameCore.removeMessageQueue(playerId);
 
         //不是吃瓜群众则加入到真正的玩家集合中并且删除自己的掉线状态
-        Set<String> disConnections = data.getDisConnections();
+        Set<Integer> disConnections = data.getDisConnections();
         if (!soc.getIsChiGuaPeople()) {
             //加入到真正的玩家（打牌的人）中
             data.getRealPlayers().add(playerId);
@@ -107,7 +100,7 @@ public class JoinRoomEvent extends BaseEvent implements Event {
      * @param roomId
      * @param players
      */
-    private void sendToOtherPlayers(SocketResult soc ,String roomId ,Set<String> players){
+    private void sendToOtherPlayers(SocketResult soc ,Integer roomId ,Set<Integer> players){
         //给别的玩家发1000的新人加入消息
         soc.setHead(1000);
         socketService.broadcast(roomId, soc, players);
@@ -206,7 +199,7 @@ public class JoinRoomEvent extends BaseEvent implements Event {
      * @return
      */
     private List<Player> getRealRoomPlayerCount(Set<String> realUserIds, Set<String> guanZhongUserIds,
-                                                Map<String, Integer> totalScoreMap ,Map<String ,Integer> runingScoreMap ,
+                                                Map<String, Integer> totalScoreMap , Map<String ,Integer> runingScoreMap ,
                                                 String gameStatus) {
         List<Long> userIds = Lists.newArrayList();
         for (String s : realUserIds) {
@@ -252,8 +245,8 @@ public class JoinRoomEvent extends BaseEvent implements Event {
     private void welcome(NiuniuData data, Task task, SocketResult socketResult) {
         String gameStatus = data.getGameStatus();
         String runingNum = data.getRuningNum();
-        String userId = task.getPlayId();
-        Set<String> readyPlayers = data.getReadyPlayMap().get(runingNum);
+        Integer userId = task.getPlayId();
+        Set<Integer> readyPlayers = data.getReadyPlayMap().get(runingNum);
         socketResult.setGameStatus(gameStatus);
         //设置准备的玩家
         if (Objects.equals(gameStatus, GameStatusEnum.READY.getCode()) ||

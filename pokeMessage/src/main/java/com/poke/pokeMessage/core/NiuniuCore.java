@@ -4,8 +4,6 @@ import com.poke.pokeMessage.bo.RoomData;
 import com.poke.pokeMessage.bo.Task;
 import com.poke.pokeMessage.bo.TaskFlag;
 import com.poke.pokeMessage.core.event.niuniu.*;
-import com.trevor.message.bo.TaskFlag;
-import com.trevor.message.core.event.niuniu.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

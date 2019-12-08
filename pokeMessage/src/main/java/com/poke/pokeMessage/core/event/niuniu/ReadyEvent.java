@@ -1,11 +1,11 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.message.bo.*;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
-import com.trevor.message.core.schedule.CountDownImpl;
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.pokeMessage.bo.*;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
+import com.poke.pokeMessage.core.schedule.CountDownImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -19,8 +19,8 @@ public class ReadyEvent extends BaseEvent implements Event {
     @Override
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
-        String userId = task.getPlayId();
-        String roomId = task.getRoomId();
+        Integer userId = task.getPlayId();
+        Integer roomId = task.getRoomId();
         //准备的人是否是真正的玩家
         if (!data.getRealPlayers().contains(task.getPlayId())) {
             SocketResult socketResult = new SocketResult(-502);
@@ -32,7 +32,7 @@ public class ReadyEvent extends BaseEvent implements Event {
         //当前局数
         String runingNum = data.getRuningNum();
         //房间里的玩家
-        Set<String> players = data.getPlayers();
+        Set<Integer> players = data.getPlayers();
         //当前的房间状态
         String gameStatus = data.getGameStatus();
         //房间状态是不是准备状态

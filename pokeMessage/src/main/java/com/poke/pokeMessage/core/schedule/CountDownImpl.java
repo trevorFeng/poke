@@ -1,8 +1,8 @@
 package com.poke.pokeMessage.core.schedule;
 
-import com.trevor.message.bo.CountDownNum;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.TaskQueue;
+import com.poke.pokeMessage.bo.CountDownNum;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.TaskQueue;
 import lombok.Data;
 
 @Data
@@ -13,7 +13,7 @@ public class CountDownImpl implements CountDownListener {
     /**
      * 房间id
      */
-    private String roomId;
+    private Integer roomId;
 
     /**
      * 哪个阶段的倒计时
@@ -25,7 +25,7 @@ public class CountDownImpl implements CountDownListener {
      */
     private Integer time = 5;
 
-    public CountDownImpl(String roomId, Integer time, String countDownFlag) {
+    public CountDownImpl(Integer roomId, Integer time, String countDownFlag) {
         this.roomId = roomId;
         this.time = time;
         this.countDownFlag = countDownFlag;
@@ -41,7 +41,7 @@ public class CountDownImpl implements CountDownListener {
     }
 
     @Override
-    public String getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 

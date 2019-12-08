@@ -1,6 +1,6 @@
 package com.poke.pokeMessage.bo;
 
-import com.trevor.common.bo.PaiXing;
+import com.poke.common.bean.bo.PaiXing;
 import lombok.Data;
 
 import java.util.*;
@@ -64,27 +64,27 @@ public class NiuniuData extends RoomData {
     /**
      * 房间里的玩家
      */
-    private Set<String> players = new HashSet<>();
+    private Set<Integer> players = new HashSet<>();
 
     /**
      * 真正的玩家
      */
-    private Set<String> realPlayers = new HashSet<>();
+    private Set<Integer> realPlayers = new HashSet<>();
 
     /**
      * 观众
      */
-    private Set<String> guanZhongs = new HashSet<>();
+    private Set<Integer> guanZhongs = new HashSet<>();
 
     /**
      * 掉线的玩家
      */
-    private Set<String> disConnections = new HashSet<>();
+    private Set<Integer> disConnections = new HashSet<>();
 
     /**
      * key为runingNum
      */
-    private Map<String, Set<String>> readyPlayMap = new HashMap<>();
+    private Map<String, Set<Integer>> readyPlayMap = new HashMap<>();
 
     /**
      * 外层key为runingNum,内层key为玩家id，内层value为玩家的牌
@@ -94,7 +94,7 @@ public class NiuniuData extends RoomData {
     /**
      * 外层key为runingNum,内层key为玩家id，内层value为抢庄的倍数
      */
-    private Map<String, Map<String, Integer>> qiangZhuangMap = new HashMap<>();
+    private Map<String, Map<Integer, Integer>> qiangZhuangMap = new HashMap<>();
 
     /**
      * key为runingNum，value为庄家id
@@ -104,17 +104,17 @@ public class NiuniuData extends RoomData {
     /**
      * 外层key为runingNum,内层key为玩家id，内层value为下注的倍数
      */
-    private Map<String, Map<String, Integer>> xiaZhuMap = new HashMap<>();
+    private Map<String, Map<Integer, Integer>> xiaZhuMap = new HashMap<>();
 
     /**
      * 外层key为runingNum,内层key为玩家id，内层value为牌型
      */
-    private Map<String, Map<String, PaiXing>> paiXingMap = new HashMap<>();
+    private Map<String, Map<Integer, PaiXing>> paiXingMap = new HashMap<>();
 
     /**
      * key为runingNum,value为摊牌玩家id
      */
-    private Map<String, Set<String>> tanPaiMap = new HashMap<>();
+    private Map<String, Set<Integer>> tanPaiMap = new HashMap<>();
 
     /**
      * 玩家每一句的分数

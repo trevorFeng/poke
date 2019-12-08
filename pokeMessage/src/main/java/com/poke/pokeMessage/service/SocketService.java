@@ -1,6 +1,9 @@
 package com.poke.pokeMessage.service;
 
 import com.poke.common.bean.bo.SocketResult;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.GameCore;
+import com.poke.pokeMessage.core.TaskQueue;
 import com.poke.pokeMessage.socket.socketImpl.NiuniuSocket;
 import com.trevor.common.bo.RedisConstant;
 import com.trevor.common.bo.SocketResult;
@@ -27,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class SocketService {
 
-    public static ConcurrentHashMap<String, NiuniuSocket> sockets = new ConcurrentHashMap<>(2 << 11);
+    public static ConcurrentHashMap<Integer, NiuniuSocket> sockets = new ConcurrentHashMap<>(2 << 11);
 
 
     @Resource
@@ -67,8 +70,8 @@ public class SocketService {
      * @param roomId
      * @param res
      */
-    public void broadcast(String roomId, SocketResult res, Set<String> playerIds) {
-        for (String playId : playerIds) {
+    public void broadcast(Integer roomId, SocketResult res, Set<Integer> playerIds) {
+        for (Integer playId : playerIds) {
             sendToUserMessage(playId, res, roomId);
         }
     }
@@ -79,7 +82,7 @@ public class SocketService {
      * @param playId
      * @param res
      */
-    public void sendToUserMessage(String playId, SocketResult res, String roomId) {
+    public void sendToUserMessage(Integer playId, SocketResult res, Integer roomId) {
         NiuniuSocket socket = sockets.get(playId);
         if (socket != null && socket.session != null && socket.session.isOpen()) {
             socket.sendMessage(res);
@@ -96,13 +99,13 @@ public class SocketService {
      * @param roomId
      * @param socket
      */
-    public void leave(String roomId, NiuniuSocket socket) {
+    public void leave(Integer roomId, NiuniuSocket socket) {
         if (sockets.containsKey(socket.userId)) {
             NiuniuSocket s = sockets.get(socket.userId);
             s.close(socket.session);
             sockets.remove(socket.userId);
             //删除消息通道
-            redisService.delete(RedisConstant.MESSAGES_QUEUE + socket.userId);
+            gameCore.removeMessageQueue(socket.userId);
 
             Task task = Task.getLeave(roomId, socket.userId);
             taskQueue.addTask(roomId, task);
@@ -130,7 +133,7 @@ public class SocketService {
      * @param players
      * @param roomId
      */
-    public void stopRoom(Set<String> players ,String roomId){
+    public void stopRoom(Set<String> players ,Integer roomId){
         gameCore.removeRoomData(roomId);
         log.info("停止房间：" + roomId);
         for (String playerId : players) {

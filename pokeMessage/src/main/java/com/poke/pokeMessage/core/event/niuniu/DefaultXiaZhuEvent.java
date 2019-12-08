@@ -1,13 +1,13 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
 import com.google.common.collect.Maps;
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.message.bo.NiuniuData;
-import com.trevor.message.bo.RoomData;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.pokeMessage.bo.NiuniuData;
+import com.poke.pokeMessage.bo.RoomData;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,7 +23,7 @@ public class DefaultXiaZhuEvent extends BaseEvent implements Event {
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
         String rungingNum = data.getRuningNum();
-        String roomId = data.getRoomId();
+        Integer roomId = data.getRoomId();
         Set<String> players = data.getPlayers();
         Set<String> readyPlayers = data.getReadyPlayMap().get(rungingNum);
         //已经下注的玩家

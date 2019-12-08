@@ -7,6 +7,6 @@ public interface CountDownListener {
      */
     void onCountDown();
 
-    String getRoomId();
+    Integer getRoomId();
 
 }

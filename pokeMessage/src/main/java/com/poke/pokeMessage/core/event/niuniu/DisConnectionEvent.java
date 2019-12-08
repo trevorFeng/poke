@@ -17,7 +17,7 @@ public class DisConnectionEvent extends BaseEvent implements Event {
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
         Set<String> realPlayers = data.getRealPlayers();
-        String playerId = task.getPlayId();
+        Integer playerId = task.getPlayId();
         Set<String> players = data.getPlayers();
         //如果是真正的玩家则广播消息断开连接的消息
         if (realPlayers.contains(playerId)) {

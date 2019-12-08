@@ -8,6 +8,8 @@ import com.poke.common.util.JsonUtil;
 import com.poke.pokeMessage.bo.SocketMessage;
 import com.poke.pokeMessage.bo.Task;
 import com.poke.pokeMessage.socket.BaseServer;
+import com.poke.pokeMessage.socket.decoder.NiuniuDecoder;
+import com.poke.pokeMessage.socket.encoder.NiuniuEncoder;
 import com.trevor.common.bo.RedisConstant;
 import com.trevor.common.bo.SocketResult;
 import com.trevor.common.bo.WebKeys;

@@ -16,12 +16,10 @@ import java.util.List;
 public class PlayerResult {
 
 
-    private String id;
-
     /**
      * 用户id
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 开房的id

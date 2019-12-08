@@ -1,5 +1,14 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.bean.domain.mongo.PlayerResult;
+import com.poke.common.bean.domain.mysql.User;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.pokeMessage.bo.NiuniuData;
+import com.poke.pokeMessage.bo.RoomData;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
 import com.trevor.common.bo.PaiXing;
 import com.trevor.common.bo.SocketResult;
 import com.trevor.common.domain.mongo.PlayerResult;
@@ -21,8 +30,8 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
     @Override
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
-        String roomId = data.getRoomId();
-        Set<String> players = data.getPlayers();
+        Integer roomId = data.getRoomId();
+        Set<Integer> players = data.getPlayers();
 
         data.setGameStatus(GameStatusEnum.JIE_SUAN.getCode());
         SocketResult soc = new SocketResult(1012);
@@ -63,11 +72,11 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
         }
     }
 
-    private List<PlayerResult> generatePlayerResults(String roomId, NiuniuData data) {
+    private List<PlayerResult> generatePlayerResults(Integer roomId, NiuniuData data) {
         Long entryDatetime = System.currentTimeMillis();
         String runingNum = data.getRuningNum();
         Map<String, Integer> scoreMap = data.getRuningScoreMap().get(runingNum);
-        Set<String> readyPlayerStr = data.getReadyPlayMap().get(runingNum);
+        Set<Integer> readyPlayerStr = data.getReadyPlayMap().get(runingNum);
         List<Long> readyPlayerLong = readyPlayerStr.stream().map(s -> Long.valueOf(s)).collect(Collectors.toList());
         List<User> users = userService.findUsersByIds(readyPlayerLong);
         String zhuangJiaId = data.getZhuangJiaMap().get(runingNum);
@@ -77,7 +86,7 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
         List<PlayerResult> playerResults = new ArrayList<>();
         for (User user : users) {
             PlayerResult playerResult = new PlayerResult();
-            Long userId = user.getId();
+            Integer userId = user.getId();
             String userIdStr = String.valueOf(user.getId());
             //玩家id
             playerResult.setUserId(userId);

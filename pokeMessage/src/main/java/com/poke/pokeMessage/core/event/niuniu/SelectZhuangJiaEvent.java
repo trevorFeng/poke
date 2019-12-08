@@ -2,6 +2,11 @@ package com.poke.pokeMessage.core.event.niuniu;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.poke.pokeMessage.bo.NiuniuData;
+import com.poke.pokeMessage.bo.RoomData;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
 import com.trevor.common.bo.SocketResult;
 import com.trevor.common.enums.GameStatusEnum;
 import com.trevor.common.util.RandomUtils;
@@ -24,8 +29,8 @@ public class SelectZhuangJiaEvent extends BaseEvent implements Event {
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
         String rungingNum = data.getRuningNum();
-        String roomId = data.getRoomId();
-        Set<String> players = data.getPlayers();
+        Integer roomId = data.getRoomId();
+        Set<Integer> players = data.getPlayers();
         //防止多次计算庄家
         if (data.getZhuangJiaMap().get(rungingNum) != null) {
             return;

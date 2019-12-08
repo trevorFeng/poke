@@ -1,7 +1,7 @@
 package com.poke.pokeMessage.socket.decoder;
 
 import com.alibaba.fastjson.JSON;
-import com.trevor.message.bo.SocketMessage;
+import com.poke.pokeMessage.bo.SocketMessage;
 
 import javax.websocket.EndpointConfig;
 

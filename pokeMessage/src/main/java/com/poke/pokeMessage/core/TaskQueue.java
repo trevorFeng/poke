@@ -25,17 +25,17 @@ public class TaskQueue implements ApplicationRunner {
     /**
      * 每個房間的任務隊列
      */
-    public static Map<String, ConcurrentLinkedQueue<Task>> taskQueueMap = Maps.newConcurrentMap();
+    public static Map<Integer, ConcurrentLinkedQueue<Task>> taskQueueMap = Maps.newConcurrentMap();
 
     /**
      * executor1管的房间id
      */
-    public static List<String> executor1ToRoomIds = new CopyOnWriteArrayList<>();
+    public static List<Integer> executor1ToRoomIds = new CopyOnWriteArrayList<>();
 
     /**
      * executor2管的房间id
      */
-    public static List<String> executor2ToRoomIds = new CopyOnWriteArrayList<>();
+    public static List<Integer> executor2ToRoomIds = new CopyOnWriteArrayList<>();
 
     private static Executor executor1 = Executors.newFixedThreadPool(1);
 
@@ -46,7 +46,7 @@ public class TaskQueue implements ApplicationRunner {
      *
      * @param roomId
      */
-    public void addQueue(String roomId) {
+    public void addQueue(Integer roomId) {
         taskQueueMap.put(roomId, new ConcurrentLinkedQueue<>());
         int executor1ToRoomIdsSize = executor1ToRoomIds.size();
         int executor2ToRoomIdsSize = executor2ToRoomIds.size();
@@ -65,7 +65,7 @@ public class TaskQueue implements ApplicationRunner {
      * @param roomId
      * @return
      */
-    public Boolean deleteQueue(String roomId) {
+    public Boolean deleteQueue(Integer roomId) {
         if (!taskQueueMap.get(roomId).isEmpty()) {
             return Boolean.FALSE;
         }
@@ -84,7 +84,7 @@ public class TaskQueue implements ApplicationRunner {
      * @param roomId
      * @param task
      */
-    public void addTask(String roomId, Task task) {
+    public void addTask(Integer roomId, Task task) {
         ConcurrentLinkedQueue<Task> taskQueue = taskQueueMap.get(roomId);
         taskQueue.offer(task);
 

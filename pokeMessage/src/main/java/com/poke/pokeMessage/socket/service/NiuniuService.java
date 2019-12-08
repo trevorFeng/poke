@@ -1,9 +1,9 @@
 package com.poke.pokeMessage.socket.service;
 
-import com.trevor.message.bo.SocketMessage;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.TaskQueue;
-import com.trevor.message.socket.socketImpl.NiuniuSocket;
+import com.poke.pokeMessage.bo.SocketMessage;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.TaskQueue;
+import com.poke.pokeMessage.socket.socketImpl.NiuniuSocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class NiuniuService {
      *
      * @param roomId
      */
-    public void dealReadyMessage(String roomId, NiuniuSocket socket) {
+    public void dealReadyMessage(Integer roomId, NiuniuSocket socket) {
         Task task = Task.getNiuniuReady(roomId, socket.userId);
         taskQueue.addTask(roomId, task);
     }
@@ -32,7 +32,7 @@ public class NiuniuService {
      *
      * @param roomId
      */
-    public void dealQiangZhuangMessage(String roomId, NiuniuSocket socket, SocketMessage socketMessage) {
+    public void dealQiangZhuangMessage(Integer roomId, NiuniuSocket socket, SocketMessage socketMessage) {
         Task task = Task.getNiuniuQiangZhuang(roomId, socket.userId, socketMessage.getQiangZhuangMultiple());
         taskQueue.addTask(roomId, task);
     }
@@ -42,7 +42,7 @@ public class NiuniuService {
      *
      * @param roomId
      */
-    public void dealXiaZhuMessage(String roomId, NiuniuSocket socket, SocketMessage socketMessage) {
+    public void dealXiaZhuMessage(Integer roomId, NiuniuSocket socket, SocketMessage socketMessage) {
         Task task = Task.getNiuniuXiaZhu(roomId, socket.userId, socketMessage.getXianJiaMultiple());
         taskQueue.addTask(roomId, task);
     }
@@ -52,7 +52,7 @@ public class NiuniuService {
      *
      * @param roomId
      */
-    public void dealTanPaiMessage(String roomId, NiuniuSocket socket) {
+    public void dealTanPaiMessage(Integer roomId, NiuniuSocket socket) {
         Task task = Task.getNiuniuTanPai(roomId, socket.userId);
         taskQueue.addTask(roomId, task);
     }

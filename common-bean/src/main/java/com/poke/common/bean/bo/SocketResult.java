@@ -58,7 +58,7 @@ public class SocketResult {
     private Integer shuoHuaCode;
 
 
-    private String userId;
+    private Integer userId;
 
 
     private String name;
@@ -110,17 +110,17 @@ public class SocketResult {
     /**
      * 已经掉线的玩家
      */
-    private Set<String> disConnectionPlayerIds;
+    private Set<Integer> disConnectionPlayerIds;
 
     /**
      * 已经点击准备的玩家
      */
-    private Set<String> readyPlayerIds;
+    private Set<Integer> readyPlayerIds;
 
     /**
      * 下一局准备的顽疾
      */
-    private Set<String> nextReadyPlayerIds;
+    private Set<Integer> nextReadyPlayerIds;
 
     /**
      * 玩家的4张牌
@@ -196,7 +196,7 @@ public class SocketResult {
         this.countDown = countDown;
     }
 
-    public SocketResult(Integer head , String userId) {
+    public SocketResult(Integer head , Integer userId) {
         this.head = head;
         this.userId = userId;
     }
@@ -211,13 +211,13 @@ public class SocketResult {
         this.userPokeMap_5 = userPokeMap_5;
     }
 
-    public SocketResult(Integer head , String userId , Integer qiangZhuangBeiShu){
+    public SocketResult(Integer head , Integer userId , Integer qiangZhuangBeiShu){
         this.head = head;
         this.userId = userId;
         this.qiangZhuangBeiShu = qiangZhuangBeiShu;
     }
 
-    public SocketResult(Integer head , String userId , Integer xiaZhuBeiShu , Boolean isXiaZhu){
+    public SocketResult(Integer head , Integer userId , Integer xiaZhuBeiShu , Boolean isXiaZhu){
         this.head = head;
         this.userId = userId;
         this.xiaZhuBeiShu = xiaZhuBeiShu;

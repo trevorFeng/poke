@@ -1,5 +1,12 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.pokeMessage.bo.NiuniuData;
+import com.poke.pokeMessage.bo.RoomData;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
 import com.trevor.common.bo.SocketResult;
 import com.trevor.common.enums.GameStatusEnum;
 import com.trevor.message.bo.NiuniuData;
@@ -20,12 +27,12 @@ public class XiaZhuEvent extends BaseEvent implements Event {
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
         String gameStatus = data.getGameStatus();
-        String playerId = task.getPlayId();
-        String roomId = task.getRoomId();
+        Integer playerId = task.getPlayId();
+        Integer roomId = task.getRoomId();
         String runingNum = data.getRuningNum();
-        Set<String> readyPlayers = data.getReadyPlayMap().get(runingNum);
+        Set<Integer> readyPlayers = data.getReadyPlayMap().get(runingNum);
         String zhuangJiaId = data.getZhuangJiaMap().get(runingNum);
-        Set<String> players = data.getPlayers();
+        Set<Integer> players = data.getPlayers();
         //校验状态
         if (!Objects.equals(gameStatus, GameStatusEnum.XIA_ZHU_COUNT_DOWN_START.getCode())) {
             socketService.sendToUserMessage(playerId, new SocketResult(-501), roomId);

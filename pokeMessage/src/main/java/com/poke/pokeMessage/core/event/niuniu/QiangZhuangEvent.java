@@ -1,5 +1,12 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.pokeMessage.bo.NiuniuData;
+import com.poke.pokeMessage.bo.RoomData;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
 import com.trevor.common.bo.SocketResult;
 import com.trevor.common.enums.GameStatusEnum;
 import com.trevor.message.bo.NiuniuData;
@@ -24,16 +31,16 @@ public class QiangZhuangEvent extends BaseEvent implements Event {
         String runingNum = data.getRuningNum();
         //当前的房间状态
         String gameStatus = data.getGameStatus();
-        String roomId = data.getRoomId();
-        String playerId = task.getPlayId();
-        Set<String> players = data.getPlayers();
+        Integer roomId = data.getRoomId();
+        Integer playerId = task.getPlayId();
+        Set<Integer> players = data.getPlayers();
         //验证状态
         if (!Objects.equals(gameStatus, GameStatusEnum.QIANG_ZHUANG_COUNT_DOWN_START.getCode())) {
             socketService.sendToUserMessage(playerId, new SocketResult(-501), roomId);
             return;
         }
         //校验是否是准备的玩家
-        Set<String> readyPlayers = data.getReadyPlayMap().get(runingNum);
+        Set<Integer> readyPlayers = data.getReadyPlayMap().get(runingNum);
         if (!readyPlayers.contains(playerId)) {
             socketService.sendToUserMessage(playerId, new SocketResult(-503), roomId);
             return;
@@ -42,7 +49,7 @@ public class QiangZhuangEvent extends BaseEvent implements Event {
         //放入data
         Integer multiple = task.getQiangZhuangBeiShu() <= 0 ? 0 : task.getQiangZhuangBeiShu();
         data.getQiangZhuangMap().putIfAbsent(runingNum, new HashMap<>());
-        Map<String, Integer> qiangZhuangMap = data.getQiangZhuangMap().get(runingNum);
+        Map<Integer, Integer> qiangZhuangMap = data.getQiangZhuangMap().get(runingNum);
         qiangZhuangMap.putIfAbsent(playerId, multiple);
 
 

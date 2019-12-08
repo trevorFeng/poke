@@ -1,12 +1,12 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.message.bo.NiuniuData;
-import com.trevor.message.bo.RoomData;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.pokeMessage.bo.NiuniuData;
+import com.poke.pokeMessage.bo.RoomData;
+import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -20,15 +20,15 @@ public class TanPaiEvent extends BaseEvent implements Event {
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
         String gameStatus = data.getGameStatus();
-        String playerId = task.getPlayId();
-        String roomId = task.getRoomId();
+        Integer playerId = task.getPlayId();
+        Integer roomId = task.getRoomId();
         //状态信息
         if (!Objects.equals(gameStatus, GameStatusEnum.TAN_PAI_COUNT_DOWN_START.getCode())) {
             socketService.sendToUserMessage(playerId, new SocketResult(-501), roomId);
             return;
         }
         String runingNum = data.getRuningNum();
-        Set<String> readyPlayers = data.getReadyPlayMap().get(runingNum);
+        Set<Integer> readyPlayers = data.getReadyPlayMap().get(runingNum);
         if (!readyPlayers.contains(playerId)) {
             socketService.sendToUserMessage(playerId, new SocketResult(-503), roomId);
             return;
@@ -37,7 +37,7 @@ public class TanPaiEvent extends BaseEvent implements Event {
         data.getTanPaiMap().get(runingNum).add(playerId);
 
         //广播摊牌的消息
-        Set<String> players = data.getPlayers();
+        Set<Integer> players = data.getPlayers();
         SocketResult socketResult = new SocketResult();
         socketResult.setHead(1014);
         socketResult.setUserId(playerId);

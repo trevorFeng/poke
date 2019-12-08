@@ -1,6 +1,14 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
 import com.google.common.collect.Maps;
+import com.poke.common.bean.bo.PaiXing;
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.common.util.PokeUtil;
+import com.poke.pokeMessage.bo.*;
+import com.poke.pokeMessage.core.event.BaseEvent;
+import com.poke.pokeMessage.core.event.Event;
+import com.poke.pokeMessage.core.schedule.CountDownImpl;
 import com.trevor.common.bo.PaiXing;
 import com.trevor.common.bo.SocketResult;
 import com.trevor.common.enums.GameStatusEnum;
@@ -25,7 +33,7 @@ public class FaPai1Event extends BaseEvent implements Event {
     @Override
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
-        String roomId = data.getRoomId();
+        Integer roomId = data.getRoomId();
         String runingNum = data.getRuningNum();
         //计算得分,将用户的牌型放入paiXingMap,得分和总分放入scoreMap
         calcScore(data, runingNum);
