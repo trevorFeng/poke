@@ -9,4 +9,6 @@ public interface UserService {
     User findByOpenidAndUserId(String openid ,Integer userId);
 
     List<User> findUsersByIds(List<Integer> userIds);
+
+    User findUserById(Integer userId);
 }

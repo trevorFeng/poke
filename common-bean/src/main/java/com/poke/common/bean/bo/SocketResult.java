@@ -155,7 +155,7 @@ public class SocketResult {
     /**
      * 摊牌的玩家
      */
-    private Set<String> tanPaiPlayerUserIds;
+    private Set<Integer> tanPaiPlayerUserIds;
 
 
     /**
@@ -196,10 +196,10 @@ public class SocketResult {
         this.countDown = countDown;
     }
 
-    public SocketResult(Integer head , Integer userId) {
-        this.head = head;
-        this.userId = userId;
-    }
+//    public SocketResult(Integer head , Integer userId) {
+//        this.head = head;
+//        this.userId = userId;
+//    }
 
     public SocketResult(Integer head , List<String> userPokeList_4) {
         this.head = head;

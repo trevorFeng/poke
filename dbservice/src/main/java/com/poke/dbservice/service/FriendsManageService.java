@@ -13,4 +13,6 @@ public interface FriendsManageService {
 
     void update(FriendsManage friendsManage);
 
+    Boolean countFriendByUserIdAndManageId(Integer userId, Integer manageFriendId);
+
 }

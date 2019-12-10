@@ -30,4 +30,12 @@ public interface FriendsManageMapper {
 
     Integer passOrRemoveFriend(@Param("friendsManage") FriendsManage friendsManage);
 
+    /**
+     * 查询玩家是否是房主的好友
+     * @param userId
+     * @param manageFriendId
+     * @return
+     */
+    Integer countFriendByUserIdAndManageId(@Param("userId") Integer userId, @Param("manageFriendId") Integer manageFriendId);
+
 }

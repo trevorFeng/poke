@@ -3,10 +3,14 @@ package com.poke.pokeMessage.service;
 import com.poke.common.bean.bo.JsonEntity;
 import com.poke.common.bean.bo.ResponseHelper;
 import com.poke.common.bean.domain.mongo.NiuniuRoomParam;
+import com.poke.common.bean.domain.mysql.CardConsumRecord;
 import com.poke.common.bean.domain.mysql.Room;
 import com.poke.common.bean.enums.ConsumCardEnum;
 import com.poke.common.bean.enums.GameStatusEnum;
 import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.common.client.PersonalCardDbClient;
+import com.poke.common.client.RoomDbClient;
+import com.poke.common.client.RoomParamDbClient;
 import com.poke.pokeMessage.bo.NiuniuData;
 import com.poke.pokeMessage.core.GameCore;
 import com.poke.pokeMessage.core.TaskQueue;
@@ -42,22 +46,22 @@ public class CreateRoomService {
     private TaskQueue taskQueue;
 
     @Resource
-    private RoomMapper roomMapper;
+    private RoomDbClient roomDbClient;
 
     @Resource
     private CardConsumRecordMapper cardConsumRecordMapper;
 
     @Resource
-    private NiuniuRoomParamMapper niuniuRoomParamMapper;
+    private RoomParamDbClient roomParamDbClient;
 
     @Resource
-    private PersonalCardMapper personalCardMapper;
+    private PersonalCardDbClient personalCardDbClient;
 
     @Transactional(rollbackFor = Exception.class)
     public JsonEntity<Long> createRoom(NiuniuRoomParam niuniuRoomParam, String userId) {
         Integer playerId = Integer.valueOf(userId);
         //判断玩家拥有的房卡数量是否超过消耗的房卡数
-        Integer cardNumByUserId = personalCardMapper.findCardNumByUserId(playerId);
+        Integer cardNumByUserId = personalCardDbClient.findCardNumByUserId(playerId).getData();
         Integer consumCardNum;
         if (Objects.equals(niuniuRoomParam.getConsumCardNum(), ConsumCardEnum.GAME_NUM_12_CARD_3.getCode())) {
             consumCardNum = ConsumCardEnum.GAME_NUM_12_CARD_3.getConsumCardNum();
@@ -85,7 +89,7 @@ public class CreateRoomService {
         room.setRuningNum(0);
         room.setTotalNum(totalNum);
         room.setStatus((byte)0);
-        roomMapper.insertOne(room);
+        roomDbClient.save(room);
 
         //插入mongoDB
         niuniuRoomParam.setRoomId(room.getId());
@@ -93,7 +97,7 @@ public class CreateRoomService {
 
         //存入gameCore
         NiuniuData data = new NiuniuData();
-        data.setRoomId(room.getId().toString());
+        data.setRoomId(room.getId());
         data.setRoomType(niuniuRoomParam.getRoomType());
         data.setRobZhuangType(niuniuRoomParam.getRobZhuangType());
         data.setBasePoint(niuniuRoomParam.getBasePoint());
@@ -104,13 +108,15 @@ public class CreateRoomService {
         data.setTotalNum(totalNum.toString());
         data.setRuningNum("1");
         data.setGameStatus(GameStatusEnum.READY.getCode());
-        gameCore.putRoomData(data ,room.getId().toString());
-        taskQueue.addQueue(room.getId().toString());
+        gameCore.putRoomData(data ,room.getId());
+        taskQueue.addQueue(room.getId());
 
         //生成房卡消费记录
         CardConsumRecord cardConsumRecord = new CardConsumRecord();
-        cardConsumRecord.generateCardConsumRecordBase(room.getId(), playerId, consumCardNum);
-        cardConsumRecordMapper.insertOne(cardConsumRecord);
+        cardConsumRecord.setRoomId(room.getId());
+        cardConsumRecord.setRoomAuth(playerId);
+        cardConsumRecord.setConsumNum(consumCardNum);
+        cardConsumRecordMapper.save(cardConsumRecord);
 
         //更新玩家的房卡数量信息
         personalCardMapper.updatePersonalCardNum(playerId, cardNumByUserId - consumCardNum);

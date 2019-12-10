@@ -6,15 +6,12 @@ import com.poke.common.bean.domain.mysql.FriendsManage;
 import com.poke.common.bean.enums.MessageCodeEnum;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @FeignClient("db-service")
-public interface FriendsManageClient {
+public interface FriendsManageDbClient {
 
     @RequestMapping(value = "/api/friendsManage/find/userId" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     JsonEntity<List<FriendsManage>> findByUserId(@RequestParam Integer userId);
@@ -24,5 +21,10 @@ public interface FriendsManageClient {
 
     @RequestMapping(value = "/api/friendsManage/update" ,method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     JsonEntity<Object> update(@RequestBody FriendsManage friendsManage);
+
+
+    @RequestMapping(value = "/api/friendsManage/count/userId/{userId}/manageId/{manageId}" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    JsonEntity<Boolean> countFriendByUserIdAndManageId(@PathVariable("userId") Integer userId, @PathVariable("manageId") Integer manageId);
+
 
 }

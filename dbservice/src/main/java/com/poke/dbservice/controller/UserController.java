@@ -27,5 +27,10 @@ public class UserController {
         return ResponseHelper.createInstance(userService.findUsersByIds(userIds) , MessageCodeEnum.HANDLER_SUCCESS);
     }
 
+    @RequestMapping(value = "/api/user/query/userId/{userId}" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<User> findByUserId(@PathVariable Integer userId){
+        return ResponseHelper.createInstance(userService.findUserById(userId) , MessageCodeEnum.HANDLER_SUCCESS);
+    }
+
 
 }

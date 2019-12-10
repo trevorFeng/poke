@@ -36,4 +36,13 @@ public class UserServiceImpl implements UserService {
         }
         return userMapper.findUsersByIds(userIds);
     }
+
+    @Override
+    public User findUsersByIds(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user == null) {
+            throw new BizException(500 ,"没有该用户");
+        }
+        return user;
+    }
 }

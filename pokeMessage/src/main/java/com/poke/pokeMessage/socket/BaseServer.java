@@ -1,14 +1,11 @@
 package com.poke.pokeMessage.socket;
 
+import com.poke.common.client.FriendsManageDbClient;
+import com.poke.common.client.RoomDbClient;
+import com.poke.common.client.UserDbClient;
 import com.poke.pokeMessage.core.GameCore;
 import com.poke.pokeMessage.core.TaskQueue;
-import com.trevor.common.dao.mysql.FriendManageMapper;
-import com.trevor.common.service.RedisService;
-import com.trevor.common.service.RoomService;
-import com.trevor.common.service.UserService;
-import com.trevor.message.core.TaskQueue;
-import com.trevor.message.service.SocketService;
-import com.trevor.message.socket.service.NiuniuService;
+import com.poke.pokeMessage.socket.service.NiuniuService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,30 +17,26 @@ import javax.annotation.Resource;
 @Component
 public class BaseServer {
 
-    protected GameCore gameCore;
+    protected static GameCore gameCore;
 
-    protected static UserService userService;
-
-    protected static SocketService socketService;
+    protected static UserDbClient userDbClient;
 
     protected static TaskQueue taskQueue;
 
     protected static NiuniuService niuniuService;
 
-    protected static RoomService roomService;
+    protected static RoomDbClient roomDbClient;
 
-    protected static FriendManageMapper friendManageMapper;
-
-    protected static RedisService redisService;
+    protected static FriendsManageDbClient friendsManageDbClient;
 
     @Resource
-    public void setUserService(UserService userService) {
-        BaseServer.userService = userService;
+    public void setUserService(GameCore gameCore) {
+        BaseServer.gameCore = gameCore;
     }
 
     @Resource
-    public void setRoomSocketService(SocketService socketService) {
-        BaseServer.socketService = socketService;
+    public void setUserService(UserDbClient userDbClient) {
+        BaseServer.userDbClient = userDbClient;
     }
 
     @Resource
@@ -51,26 +44,19 @@ public class BaseServer {
         BaseServer.taskQueue = taskQueue;
     }
 
-
     @Resource
     public void setNiuniuService(NiuniuService niuniuService) {
         BaseServer.niuniuService = niuniuService;
     }
 
     @Resource
-    public void setRoomService(RoomService roomService) {
-        BaseServer.roomService = roomService;
+    public void setRoomService(RoomDbClient roomDbClient) {
+        BaseServer.roomDbClient = roomDbClient;
     }
 
     @Resource
-    public void setFriendManageMapper(FriendManageMapper friendManageMapper) {
-        BaseServer.friendManageMapper = friendManageMapper;
+    public void setFriendManageMapper(FriendsManageDbClient friendsManageDbClient) {
+        BaseServer.friendsManageDbClient = friendsManageDbClient;
     }
-
-    @Resource
-    public void setRedisService(RedisService redisService) {
-        BaseServer.redisService = redisService;
-    }
-
 
 }

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.poke.common.bean.bo.FriendInfo;
 import com.poke.common.bean.domain.mysql.FriendsManage;
 import com.poke.common.bean.domain.mysql.User;
-import com.poke.common.client.FriendsManageClient;
+import com.poke.common.client.FriendsManageDbClient;
 import com.poke.common.client.UserDbClient;
 import com.poke.common.core.UserContextHolder;
 import com.poke.pokeBiz.service.FriendManagerService;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class FriendManagerServiceImpl implements FriendManagerService {
 
     @Resource
-    private FriendsManageClient friendsManageClient;
+    private FriendsManageDbClient friendsManageDbClient;
 
     @Resource
     private UserDbClient userDbClient;
@@ -45,7 +45,7 @@ public class FriendManagerServiceImpl implements FriendManagerService {
     @Override
     public List<FriendInfo> queryFriends() {
         User user = UserContextHolder.currentUser();
-        List<FriendsManage> list = friendsManageClient.findByUserId(user.getId()).getData();
+        List<FriendsManage> list = friendsManageDbClient.findByUserId(user.getId()).getData();
         if (list.isEmpty()) {
             return new ArrayList<>();
         }
@@ -78,7 +78,7 @@ public class FriendManagerServiceImpl implements FriendManagerService {
         friendsManage.setUserId(roomAuthId);
         friendsManage.setManageFriendId(user.getId());
         friendsManage.setAllowFlag((byte) 0);
-        friendsManageClient.save(friendsManage);
+        friendsManageDbClient.save(friendsManage);
     }
 
     /**
@@ -93,7 +93,7 @@ public class FriendManagerServiceImpl implements FriendManagerService {
         friendsManage.setUserId(user.getId());
         friendsManage.setManageFriendId(passUserId);
         friendsManage.setAllowFlag((byte)1);
-        friendsManageClient.update(friendsManage);
+        friendsManageDbClient.update(friendsManage);
     }
 
     /**
@@ -108,6 +108,6 @@ public class FriendManagerServiceImpl implements FriendManagerService {
         friendsManage.setUserId(user.getId());
         friendsManage.setManageFriendId(removeUserId);
         friendsManage.setAllowFlag((byte)0);
-        friendsManageClient.update(friendsManage);
+        friendsManageDbClient.update(friendsManage);
     }
 }

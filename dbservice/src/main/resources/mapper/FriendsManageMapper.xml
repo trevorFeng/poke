@@ -107,6 +107,17 @@
         manage_friend_id=#{friendsManage.manageFriendId}
     </update>
 
+  <select id="countFriendByUserIdAndManageId" resultType="java.lang.Integer">
+        select
+        count(1)
+        from
+        friends_manage
+        where
+        user_id=#{userId}
+        and
+        manage_friend_id=#{manageFriendId}
+    </select>
+
 
 
 </mapper>

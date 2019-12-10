@@ -5,13 +5,6 @@ import com.poke.pokeMessage.bo.Task;
 import com.poke.pokeMessage.core.GameCore;
 import com.poke.pokeMessage.core.TaskQueue;
 import com.poke.pokeMessage.socket.socketImpl.NiuniuSocket;
-import com.trevor.common.bo.RedisConstant;
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.service.RedisService;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.GameCore;
-import com.trevor.message.core.TaskQueue;
-import com.trevor.message.socket.socketImpl.NiuniuSocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,10 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SocketService {
 
     public static ConcurrentHashMap<Integer, NiuniuSocket> sockets = new ConcurrentHashMap<>(2 << 11);
-
-
-    @Resource
-    private RedisService redisService;
 
     @Resource
     private TaskQueue taskQueue;
@@ -133,16 +122,15 @@ public class SocketService {
      * @param players
      * @param roomId
      */
-    public void stopRoom(Set<String> players ,Integer roomId){
+    public void stopRoom(Set<Integer> players ,Integer roomId){
         gameCore.removeRoomData(roomId);
         log.info("停止房间：" + roomId);
-        for (String playerId : players) {
+        for (Integer playerId : players) {
             NiuniuSocket socket = sockets.get(playerId);
             if (socket != null) {
                 socket.stop();
             }
             sockets.remove(playerId);
         }
-        redisService.deletes(players);
     }
 }

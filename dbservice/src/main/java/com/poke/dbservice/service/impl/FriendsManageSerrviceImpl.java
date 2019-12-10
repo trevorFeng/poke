@@ -34,4 +34,13 @@ public class FriendsManageSerrviceImpl implements FriendsManageService {
         }
     }
 
+    @Override
+    public Boolean countFriendByUserIdAndManageId(Integer userId, Integer manageFriendId) {
+        Integer count = friendsManageMapper.countFriendByUserIdAndManageId(userId, manageFriendId);
+        if (count == 0) {
+            return false;
+        }
+        return true;
+    }
+
 }
