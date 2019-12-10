@@ -7,6 +7,8 @@ public interface RoomService {
 
     Room findByRoomId(Integer id);
 
+    Integer save(Room room);
+
 
 
 }

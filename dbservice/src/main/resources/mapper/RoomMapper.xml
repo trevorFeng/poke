@@ -29,11 +29,11 @@
   </delete>
 
 
-  <insert id="insert" parameterType="com.poke.common.bean.domain.mysql.Room" >
-    insert into room (id, entry_time, room_auth, 
+  <insert id="insert" parameterType="com.poke.common.bean.domain.mysql.Room" useGeneratedKeys="true" keyProperty="id">
+    insert into room (entry_time, room_auth,
       status, room_type, runing_num, 
       total_num)
-    values (#{id,jdbcType=INTEGER}, #{entryTime,jdbcType=BIGINT}, #{roomAuth,jdbcType=INTEGER}, 
+    values (#{entryTime,jdbcType=BIGINT}, #{roomAuth,jdbcType=INTEGER},
       #{status,jdbcType=TINYINT}, #{roomType,jdbcType=TINYINT}, #{runingNum,jdbcType=INTEGER}, 
       #{totalNum,jdbcType=INTEGER})
   </insert>

@@ -1,5 +1,7 @@
 package com.poke.pokeMessage.core.event.niuniu;
 
+import com.google.common.collect.Lists;
+import com.poke.common.bean.bo.PaiXing;
 import com.poke.common.bean.bo.SocketResult;
 import com.poke.common.bean.domain.mongo.PlayerResult;
 import com.poke.common.bean.domain.mysql.User;
@@ -9,20 +11,9 @@ import com.poke.pokeMessage.bo.RoomData;
 import com.poke.pokeMessage.bo.Task;
 import com.poke.pokeMessage.core.event.BaseEvent;
 import com.poke.pokeMessage.core.event.Event;
-import com.trevor.common.bo.PaiXing;
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.domain.mongo.PlayerResult;
-import com.trevor.common.domain.mysql.User;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.message.bo.NiuniuData;
-import com.trevor.message.bo.RoomData;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class StopOrContinueEvent extends BaseEvent implements Event {
@@ -41,7 +32,7 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
 
         //保存结果
         List<PlayerResult> playerResults = generatePlayerResults(roomId, data);
-        playerResultMapper.saveAll(playerResults);
+        playerResultDbClient.saveList(playerResults);
 
         Integer runingNum = Integer.valueOf(data.getRuningNum());
         Integer totalNum = Integer.valueOf(data.getTotalNum());
@@ -49,7 +40,7 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
 
         //结束
         if (isOver) {
-            roomMapper.updateStatus(Long.valueOf(roomId), 2, runingNum);
+            roomDbClient.updateStatus(Long.valueOf(roomId), 2, runingNum);
             SocketResult socketResult = new SocketResult(1013);
             socketResult.setGameStatus(GameStatusEnum.STOP.getCode());
             socketResult.setTanPaiPlayerUserIds(data.getTanPaiMap().get(runingNum));
@@ -59,7 +50,7 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
         } else {
             Integer next = runingNum + 1;
 
-            roomMapper.updateRuningNum(Long.valueOf(roomId), runingNum);
+            roomDbClient.updateRuningNum(Long.valueOf(roomId), runingNum);
 
             data.setGameStatus(GameStatusEnum.READY.getCode());
             data.setRuningNum(next.toString());
@@ -76,13 +67,16 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
         Long entryDatetime = System.currentTimeMillis();
         String runingNum = data.getRuningNum();
         Map<String, Integer> scoreMap = data.getRuningScoreMap().get(runingNum);
-        Set<Integer> readyPlayerStr = data.getReadyPlayMap().get(runingNum);
-        List<Long> readyPlayerLong = readyPlayerStr.stream().map(s -> Long.valueOf(s)).collect(Collectors.toList());
-        List<User> users = userService.findUsersByIds(readyPlayerLong);
+        Set<Integer> readyPlayerSet = data.getReadyPlayMap().get(runingNum);
+        List<Integer> readyPlayerList = Lists.newArrayList();
+        for (Integer playerId : readyPlayerSet) {
+            readyPlayerList.add(playerId);
+        }
+        List<User> users = userDbClient.findByUserIdList(readyPlayerList).getData();
         String zhuangJiaId = data.getZhuangJiaMap().get(runingNum);
         Map<String, Integer> totalScoreMap = data.getTotalScoreMap();
         Map<String, List<String>> pokesMap = data.getPokesMap().get(runingNum);
-        Map<String, PaiXing> paiXingMap = data.getPaiXingMap().get(runingNum);
+        Map<Integer, PaiXing> paiXingMap = data.getPaiXingMap().get(runingNum);
         List<PlayerResult> playerResults = new ArrayList<>();
         for (User user : users) {
             PlayerResult playerResult = new PlayerResult();

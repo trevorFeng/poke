@@ -23,4 +23,10 @@ public class RoomServiceImpl implements RoomService {
         return room;
     }
 
+    @Override
+    public Integer save(Room room) {
+        Integer roomId = roomMapper.insert(room);
+        return roomId;
+    }
+
 }

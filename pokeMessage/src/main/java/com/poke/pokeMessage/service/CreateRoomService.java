@@ -8,27 +8,13 @@ import com.poke.common.bean.domain.mysql.Room;
 import com.poke.common.bean.enums.ConsumCardEnum;
 import com.poke.common.bean.enums.GameStatusEnum;
 import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.common.client.CardConsumDbClient;
 import com.poke.common.client.PersonalCardDbClient;
 import com.poke.common.client.RoomDbClient;
 import com.poke.common.client.RoomParamDbClient;
 import com.poke.pokeMessage.bo.NiuniuData;
 import com.poke.pokeMessage.core.GameCore;
 import com.poke.pokeMessage.core.TaskQueue;
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.bo.ResponseHelper;
-import com.trevor.common.dao.mongo.NiuniuRoomParamMapper;
-import com.trevor.common.dao.mysql.CardConsumRecordMapper;
-import com.trevor.common.dao.mysql.PersonalCardMapper;
-import com.trevor.common.dao.mysql.RoomMapper;
-import com.trevor.common.domain.mongo.NiuniuRoomParam;
-import com.trevor.common.domain.mysql.CardConsumRecord;
-import com.trevor.common.domain.mysql.Room;
-import com.trevor.common.enums.ConsumCardEnum;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.common.enums.MessageCodeEnum;
-import com.trevor.message.bo.NiuniuData;
-import com.trevor.message.core.GameCore;
-import com.trevor.message.core.TaskQueue;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +35,7 @@ public class CreateRoomService {
     private RoomDbClient roomDbClient;
 
     @Resource
-    private CardConsumRecordMapper cardConsumRecordMapper;
+    private CardConsumDbClient cardConsumDbClient;
 
     @Resource
     private RoomParamDbClient roomParamDbClient;
@@ -58,10 +44,9 @@ public class CreateRoomService {
     private PersonalCardDbClient personalCardDbClient;
 
     @Transactional(rollbackFor = Exception.class)
-    public JsonEntity<Long> createRoom(NiuniuRoomParam niuniuRoomParam, String userId) {
-        Integer playerId = Integer.valueOf(userId);
+    public JsonEntity<Integer> createRoom(NiuniuRoomParam niuniuRoomParam, Integer userId) {
         //判断玩家拥有的房卡数量是否超过消耗的房卡数
-        Integer cardNumByUserId = personalCardDbClient.findCardNumByUserId(playerId).getData();
+        Integer cardNumByUserId = personalCardDbClient.findCardNumByUserId(userId).getData();
         Integer consumCardNum;
         if (Objects.equals(niuniuRoomParam.getConsumCardNum(), ConsumCardEnum.GAME_NUM_12_CARD_3.getCode())) {
             consumCardNum = ConsumCardEnum.GAME_NUM_12_CARD_3.getConsumCardNum();
@@ -84,16 +69,16 @@ public class CreateRoomService {
         Long currentTime = System.currentTimeMillis();
         Room room = new Room();
         room.setRoomType(niuniuRoomParam.getRoomType().byteValue());
-        room.setRoomAuth(playerId);
+        room.setRoomAuth(userId);
         room.setEntryTime(currentTime);
         room.setRuningNum(0);
         room.setTotalNum(totalNum);
         room.setStatus((byte)0);
-        roomDbClient.save(room);
+        Integer roomId = roomDbClient.save(room).getData();
 
         //插入mongoDB
-        niuniuRoomParam.setRoomId(room.getId());
-        niuniuRoomParamMapper.save(niuniuRoomParam);
+        niuniuRoomParam.setRoomId(roomId);
+        roomParamDbClient.save(niuniuRoomParam);
 
         //存入gameCore
         NiuniuData data = new NiuniuData();
@@ -114,12 +99,12 @@ public class CreateRoomService {
         //生成房卡消费记录
         CardConsumRecord cardConsumRecord = new CardConsumRecord();
         cardConsumRecord.setRoomId(room.getId());
-        cardConsumRecord.setRoomAuth(playerId);
+        cardConsumRecord.setRoomAuth(userId);
         cardConsumRecord.setConsumNum(consumCardNum);
-        cardConsumRecordMapper.save(cardConsumRecord);
+        cardConsumDbClient.save(cardConsumRecord);
 
         //更新玩家的房卡数量信息
-        personalCardMapper.updatePersonalCardNum(playerId, cardNumByUserId - consumCardNum);
-        return ResponseHelper.createInstance(room.getId(), MessageCodeEnum.CREATE_SUCCESS);
+        personalCardDbClient.updatePersonalCardNum(userId, cardNumByUserId - consumCardNum);
+        return ResponseHelper.createInstance(roomId, MessageCodeEnum.CREATE_SUCCESS);
     }
 }

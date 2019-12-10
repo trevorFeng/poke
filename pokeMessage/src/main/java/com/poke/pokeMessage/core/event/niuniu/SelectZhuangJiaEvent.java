@@ -2,18 +2,13 @@ package com.poke.pokeMessage.core.event.niuniu;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.poke.pokeMessage.bo.NiuniuData;
-import com.poke.pokeMessage.bo.RoomData;
-import com.poke.pokeMessage.bo.Task;
+import com.poke.common.bean.bo.SocketResult;
+import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.common.util.RandomUtils;
+import com.poke.pokeMessage.bo.*;
 import com.poke.pokeMessage.core.event.BaseEvent;
 import com.poke.pokeMessage.core.event.Event;
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.common.util.RandomUtils;
-import com.trevor.message.bo.*;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
-import com.trevor.message.core.schedule.CountDownImpl;
+import com.poke.pokeMessage.core.schedule.CountDownImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -35,18 +30,18 @@ public class SelectZhuangJiaEvent extends BaseEvent implements Event {
         if (data.getZhuangJiaMap().get(rungingNum) != null) {
             return;
         }
-        Set<String> readyPlayers = data.getReadyPlayMap().get(rungingNum);
+        Set<Integer> readyPlayers = data.getReadyPlayMap().get(rungingNum);
         data.getQiangZhuangMap().putIfAbsent(rungingNum ,new HashMap<>());
-        Map<String, Integer> qiangZhuangMap = data.getQiangZhuangMap().get(rungingNum);
-        Map<String, Integer> realQiangZhuangMap = Maps.newHashMap();
+        Map<Integer, Integer> qiangZhuangMap = data.getQiangZhuangMap().get(rungingNum);
+        Map<Integer, Integer> realQiangZhuangMap = Maps.newHashMap();
         //删除不抢庄的
-        for (Map.Entry<String ,Integer> entry : qiangZhuangMap.entrySet()) {
+        for (Map.Entry<Integer ,Integer> entry : qiangZhuangMap.entrySet()) {
             if (entry.getValue() > 0) {
                 realQiangZhuangMap.put(entry.getKey() ,entry.getValue());
             }
         }
-        String zhuangJiaUserId;
-        List<String> qiangZhuangZhuanQuanList = Lists.newArrayList();
+        Integer zhuangJiaUserId;
+        List<Integer> qiangZhuangZhuanQuanList = Lists.newArrayList();
         //没人抢庄
         if (realQiangZhuangMap.isEmpty()) {
             zhuangJiaUserId = noPeopleQiangZhuang(readyPlayers);
@@ -63,9 +58,9 @@ public class SelectZhuangJiaEvent extends BaseEvent implements Event {
                 }
                 //升序排列
                 Collections.sort(beiShus);
-                List<String> maxBeiShuPlayerIds = Lists.newArrayList();
+                List<Integer> maxBeiShuPlayerIds = Lists.newArrayList();
                 Integer maxBeiShu = beiShus.get(beiShus.size()-1);
-                for (Map.Entry<String, Integer> entry : realQiangZhuangMap.entrySet()) {
+                for (Map.Entry<Integer, Integer> entry : realQiangZhuangMap.entrySet()) {
                     if (Objects.equals(entry.getValue(), maxBeiShu)) {
                         maxBeiShuPlayerIds.add(entry.getKey());
                     }
@@ -105,10 +100,10 @@ public class SelectZhuangJiaEvent extends BaseEvent implements Event {
     /**
      * 没人抢庄
      */
-    private String noPeopleQiangZhuang(Set<String> readyPlayers) {
+    private Integer noPeopleQiangZhuang(Set<Integer> readyPlayers) {
         Integer randNum = RandomUtils.getRandNumMax(readyPlayers.size());
-        List<String> playerIds = Lists.newArrayList();
-        for (String s : readyPlayers) {
+        List<Integer> playerIds = Lists.newArrayList();
+        for (Integer s : readyPlayers) {
             playerIds.add(s);
         }
         return playerIds.get(randNum);
@@ -121,8 +116,8 @@ public class SelectZhuangJiaEvent extends BaseEvent implements Event {
      * @param qiangZhuangMap
      * @return
      */
-    private String onePeopleQiangZhuang(Map<String, Integer> qiangZhuangMap) {
-        Iterator<String> iterator = qiangZhuangMap.keySet().iterator();
+    private Integer onePeopleQiangZhuang(Map<Integer, Integer> qiangZhuangMap) {
+        Iterator<Integer> iterator = qiangZhuangMap.keySet().iterator();
         while (iterator.hasNext()) {
             return iterator.next();
         }

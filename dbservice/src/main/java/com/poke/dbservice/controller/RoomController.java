@@ -23,9 +23,10 @@ public class RoomController {
         return ResponseHelper.createInstance(roomService.findByRoomId(id) , MessageCodeEnum.HANDLER_SUCCESS);
     }
 
-    @RequestMapping(value = "/api/room/query/{id}" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public JsonEntity<Room> findRoomAuthIdByRoomId(@PathVariable Integer id){
-        return ResponseHelper.createInstance(roomService.findByRoomId(id) , MessageCodeEnum.HANDLER_SUCCESS);
+
+    @RequestMapping(value = "/api/room/save" ,method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<Integer> save(@RequestBody Room room) {
+        return ResponseHelper.createInstance(roomService.save(room) , MessageCodeEnum.HANDLER_SUCCESS);
     }
 
 }

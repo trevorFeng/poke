@@ -1,16 +1,12 @@
 package com.poke.pokeMessage.core.event;
 
+import com.poke.common.client.PlayerResultDbClient;
+import com.poke.common.client.RoomDbClient;
+import com.poke.common.client.UserDbClient;
 import com.poke.pokeMessage.core.GameCore;
 import com.poke.pokeMessage.core.TaskQueue;
 import com.poke.pokeMessage.core.schedule.ScheduleDispatch;
 import com.poke.pokeMessage.service.SocketService;
-import com.trevor.common.dao.mongo.PlayerResultMapper;
-import com.trevor.common.dao.mysql.RoomMapper;
-import com.trevor.common.service.RedisService;
-import com.trevor.common.service.UserService;
-import com.trevor.message.core.TaskQueue;
-import com.trevor.message.core.schedule.ScheduleDispatch;
-import com.trevor.message.service.SocketService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,21 +27,12 @@ public class BaseEvent {
     protected ScheduleDispatch scheduleDispatch;
 
     @Resource
-    protected PlayerResultMapper playerResultMapper;
+    protected PlayerResultDbClient playerResultDbClient;
 
     @Resource
-    protected RoomMapper roomMapper;
+    protected RoomDbClient roomDbClient;
 
     @Resource
-    protected UserService userService;
-
-//    @Resource
-//    protected UserFeignResult userFeignResult;
-
-//    @Resource
-//    protected PlayerResultFeignResult playerResultFeignResult;
-//
-//    @Resource
-//    protected RoomFeignResult roomFeignResult;
+    protected UserDbClient userDbClient;
 
 }

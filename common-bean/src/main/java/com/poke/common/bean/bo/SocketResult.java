@@ -150,7 +150,7 @@ public class SocketResult {
     /**
      * 闲家下注的相关信息
      */
-    private Map<String ,Integer> xianJiaXiaZhuMap;
+    private Map<Integer ,Integer> xianJiaXiaZhuMap;
 
     /**
      * 摊牌的玩家

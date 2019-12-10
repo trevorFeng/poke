@@ -24,14 +24,14 @@ public class DefaultXiaZhuEvent extends BaseEvent implements Event {
         NiuniuData data = (NiuniuData) roomData;
         String rungingNum = data.getRuningNum();
         Integer roomId = data.getRoomId();
-        Set<String> players = data.getPlayers();
-        Set<String> readyPlayers = data.getReadyPlayMap().get(rungingNum);
+        Set<Integer> players = data.getPlayers();
+        Set<Integer> readyPlayers = data.getReadyPlayMap().get(rungingNum);
         //已经下注的玩家
         data.getXiaZhuMap().putIfAbsent(rungingNum ,new HashMap<>());
         Collection<Integer> xiaZhuPlayers = data.getXiaZhuMap().get(rungingNum).values();
         String zhuangJiaPlayerId = data.getZhuangJiaMap().get(rungingNum);
-        Map<String, Integer> map = Maps.newHashMap();
-        for (String s : readyPlayers) {
+        Map<Integer, Integer> map = Maps.newHashMap();
+        for (Integer s : readyPlayers) {
             if (!Objects.equals(s, zhuangJiaPlayerId) && !xiaZhuPlayers.contains(s)) {
                 map.put(s, 1);
             }

@@ -18,6 +18,6 @@ public interface RoomDbClient {
     JsonEntity<Room> findByRoomId(@PathVariable Integer id);
 
     @RequestMapping(value = "/api/room/save" ,method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    JsonEntity<Object> save(@RequestBody Room room);
+    JsonEntity<Integer> save(@RequestBody Room room);
 
 }
