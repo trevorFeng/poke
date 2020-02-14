@@ -1,6 +1,8 @@
 package com.poke.pokeAuth.controller;
 
 
+import com.poke.common.bean.bo.JsonEntity;
+import com.poke.common.bean.bo.LoginUser;
 import com.trevor.common.bo.JsonEntity;
 import com.trevor.common.bo.LoginUser;
 import com.trevor.common.bo.ResponseHelper;
@@ -37,7 +39,7 @@ public class LoginController {
     @ApiOperation("获取登录用户")
     @RequestMapping(value = "/api/login/user", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     protected JsonEntity<LoginUser> getLoginUser() {
-        User user = ThreadLocalUtil.getInstance().getUserInfo();
+        UserContextHolder
         Integer cardNum = personalCardService.findCardNumByUserId(user.getId());
 
         LoginUser loginUser = new LoginUser();

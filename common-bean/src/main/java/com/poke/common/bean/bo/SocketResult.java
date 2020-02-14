@@ -140,7 +140,7 @@ public class SocketResult {
     /**
      * 用于控制前端抢庄的转圈的显示效果,有2个以上的值就转圈
      */
-    private List<String> zhuanQuanPlayers;
+    private List<Integer> zhuanQuanPlayers;
 
     /**
      * 庄家的id

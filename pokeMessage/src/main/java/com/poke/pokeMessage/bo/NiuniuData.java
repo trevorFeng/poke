@@ -54,7 +54,7 @@ public class NiuniuData extends RoomData {
     /**
      * 当前局数
      */
-    private String runingNum;
+    private Integer runingNum;
 
     /**
      * 房间状态
@@ -84,45 +84,45 @@ public class NiuniuData extends RoomData {
     /**
      * key为runingNum
      */
-    private Map<String, Set<Integer>> readyPlayMap = new HashMap<>();
+    private Map<Integer, Set<Integer>> readyPlayMap = new HashMap<>();
 
     /**
      * 外层key为runingNum,内层key为玩家id，内层value为玩家的牌
      */
-    private Map<String, Map<String, List<String>>> pokesMap = new HashMap<>();
+    private Map<Integer, Map<Integer, List<String>>> pokesMap = new HashMap<>();
 
     /**
      * 外层key为runingNum,内层key为玩家id，内层value为抢庄的倍数
      */
-    private Map<String, Map<Integer, Integer>> qiangZhuangMap = new HashMap<>();
+    private Map<Integer, Map<Integer, Integer>> qiangZhuangMap = new HashMap<>();
 
     /**
      * key为runingNum，value为庄家id
      */
-    private Map<String, String> zhuangJiaMap = new HashMap<>();
+    private Map<Integer, Integer> zhuangJiaMap = new HashMap<>();
 
     /**
      * 外层key为runingNum,内层key为玩家id，内层value为下注的倍数
      */
-    private Map<String, Map<Integer, Integer>> xiaZhuMap = new HashMap<>();
+    private Map<Integer, Map<Integer, Integer>> xiaZhuMap = new HashMap<>();
 
     /**
      * 外层key为runingNum,内层key为玩家id，内层value为牌型
      */
-    private Map<String, Map<Integer, PaiXing>> paiXingMap = new HashMap<>();
+    private Map<Integer, Map<Integer, PaiXing>> paiXingMap = new HashMap<>();
 
     /**
      * key为runingNum,value为摊牌玩家id
      */
-    private Map<String, Set<Integer>> tanPaiMap = new HashMap<>();
+    private Map<Integer, Set<Integer>> tanPaiMap = new HashMap<>();
 
     /**
      * 玩家每一句的分数
      */
-    private Map<String, Map<String, Integer>> runingScoreMap = new HashMap<>();
+    private Map<Integer, Map<Integer, Integer>> runingScoreMap = new HashMap<>();
 
     /**
      * 玩家总分
      */
-    private Map<String, Integer> totalScoreMap = new HashMap<>();
+    private Map<Integer, Integer> totalScoreMap = new HashMap<>();
 }

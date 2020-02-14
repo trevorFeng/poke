@@ -51,7 +51,7 @@ BrowserLoginController {
 
     @ApiOperation("生成验证码,给用户发送验证码")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "phoneNum", dataType = "string", required = true, value = "phoneNum")})
-    @RequestMapping(value = "/front/phone/code/{phoneNum}", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/phone/code/{phoneNum}", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<String> sendCode(@PathVariable("phoneNum") @Pattern (regexp = "^[0-9]{11}$" ,message = "手机号格式不正确") String phoneNum){
 //        JsonEntity<String> stringJsonEntity = browserLoginService.generatePhoneCode(phoneNum);
 //        if (stringJsonEntity.getCode() < 0) {
@@ -64,13 +64,15 @@ BrowserLoginController {
 
     @ApiOperation("校验用户的验证码是否正确")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "body", name = "phoneCode", dataType = "PhoneCode", required = true, value = "phoneCode")})
-    @RequestMapping(value = "/front/phone/code/check", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/phone/code/check", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<String> submit(@RequestBody @Validated PhoneCode phoneCode){
         //校验验证码是否正确
         String code = redisService.getValue(phoneCode.getPhoneNum());
         if (Objects.equals(code ,phoneCode.getCode())) {
-            JsonEntity<User> result = browserLoginService.getUserHashAndOpenidByPhoneNum(phoneCode.getPhoneNum());
-            User user = result.getData();
+            User user = browserLoginService.getUserHashAndOpenidByPhoneNum(phoneCode.getPhoneNum());
+            if (user == null) {
+                return ResponseHelper.withErrorInstance(MessageCodeEnum.PHONE_NOT_EXIST);
+            }
             Map<String, Object> claims = new HashMap<>(2<<4);
             claims.put("hash", user.getHash());
             claims.put("openid", user.getOpenId());

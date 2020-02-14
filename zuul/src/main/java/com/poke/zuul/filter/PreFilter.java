@@ -6,16 +6,20 @@ import com.poke.common.bean.bo.ResponseHelper;
 import com.poke.common.bean.bo.WebKeys;
 import com.poke.common.bean.enums.MessageCodeEnum;
 import com.poke.common.util.JsonUtil;
-import com.poke.common.util.TokenUtil;
+import com.poke.zuul.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
-public class AccessFilter extends ZuulFilter {
+public class PreFilter extends ZuulFilter {
+
+    @Resource
+    private RedisService redisService;
 
     @Override
     public String filterType() {
@@ -49,25 +53,17 @@ public class AccessFilter extends ZuulFilter {
             ctx.setResponseStatusCode(401);
             ctx.setResponseBody(JsonUtil.toJsonString(ResponseHelper.createInstanceWithOutData(MessageCodeEnum.TOKEN_ERROR)));
             return null;
-        }else {
-            //解析token
-            Map<String, Object> claims = TokenUtil.getClaimsFromToken(token);
-            String openid = (String) claims.get("openid");
-            String userId = (String) claims.get("userid");
-            Long timestamp = (Long) claims.get("timestamp");
-
-            //三者必须存在,少一样说明token被篡改
-            if (openid == null || userId == null || timestamp == null) {
-                // 过滤该请求，不对其进行路由
-                ctx.setSendZuulResponse(false);
-                // 返回错误码
-                ctx.setResponseStatusCode(401);
-                // 返回错误内容
-                ctx.setResponseBody(JsonUtil.toJsonString(ResponseHelper.createInstanceWithOutData(MessageCodeEnum.TOKEN_ERROR)));
-                return null;
-            }
-            return true;
-
         }
+        //如果token存在于redis的key中，则更新过期时间，默认7天
+        if (redisService.hasKey("acess_token:" + token)) {
+            redisService.setValueWithExpire("acess_token:" + token ,String.valueOf(System.currentTimeMillis())
+                    ,7 * 24 * 60 * 60L , TimeUnit.MILLISECONDS);
+        }else {
+            ctx.setSendZuulResponse(false);
+            ctx.setResponseStatusCode(401);
+            ctx.setResponseBody(JsonUtil.toJsonString(ResponseHelper.createInstanceWithOutData(MessageCodeEnum.TOKEN_ERROR)));
+            return null;
+        }
+        return true;
     }
 }

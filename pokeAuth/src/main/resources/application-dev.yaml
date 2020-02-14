@@ -1,13 +1,13 @@
 server:
-  port: 9001
+  port: 9002
 
 spring:
   application:
-    name: zuul-server
+    name: auth
 
 
   profiles:
-    include: common-util-dev
+    include: common_util_dev
 
 eureka:
   client:

@@ -3,7 +3,9 @@ package com.poke.pokeAuth.controller;
 
 import com.poke.common.bean.bo.JsonEntity;
 import com.poke.common.bean.bo.ResponseHelper;
+import com.poke.common.bean.domain.mysql.User;
 import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.pokeAuth.bo.PhoneCode;
 import com.poke.pokeAuth.service.BindingPhoneService;
 import com.poke.pokeAuth.service.BrowserLoginService;
 import com.poke.pokeAuth.service.RedisService;
@@ -53,12 +55,14 @@ public class BindingPhoneController {
     public JsonEntity<String> bindPhoneNum(@PathVariable("phoneNum") @Pattern(regexp = "^[0-9]{11}$" ,message = "手机号格式不正确") String phoneNum){
         JsonEntity<String> stringJsonEntity = browserLoginService.generatePhoneCode(phoneNum);
         if (stringJsonEntity.getCode() < 0) {
+
             return stringJsonEntity;
         }
         String code = stringJsonEntity.getData();
         redisService.setValueWithExpire(phoneNum ,"123456" ,60*5L , TimeUnit.SECONDS);
         return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.SEND_MESSAGE);
     }
+
 
     @ApiOperation("校验用户的验证码是否正确,并绑定")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "body", name = "phoneCode", dataType = "PhoneCode", required = true, value = "phoneCode")})

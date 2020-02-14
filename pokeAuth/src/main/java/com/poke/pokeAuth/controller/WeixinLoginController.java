@@ -1,12 +1,12 @@
 package com.poke.pokeAuth.controller;
 
 
-import com.trevor.auth.service.WeixinService;
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.bo.ResponseHelper;
-import com.trevor.common.enums.MessageCodeEnum;
-import com.trevor.common.service.RedisService;
-import com.trevor.common.util.RandomUtils;
+import com.poke.common.bean.bo.JsonEntity;
+import com.poke.common.bean.bo.ResponseHelper;
+import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.common.util.RandomUtils;
+import com.poke.pokeAuth.service.RedisService;
+import com.poke.pokeAuth.service.WeixinService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;

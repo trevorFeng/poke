@@ -4,11 +4,12 @@ import com.google.common.collect.Maps;
 import com.poke.common.bean.bo.PaiXing;
 import com.poke.common.bean.bo.SocketResult;
 import com.poke.common.bean.enums.GameStatusEnum;
-import com.poke.common.util.PokeUtil;
+import com.poke.common.bean.enums.NiuNiuPaiXingEnum;
 import com.poke.pokeMessage.bo.*;
 import com.poke.pokeMessage.core.event.BaseEvent;
 import com.poke.pokeMessage.core.event.Event;
 import com.poke.pokeMessage.core.schedule.CountDownImpl;
+import com.poke.pokeMessage.util.PokeUtil;
 import com.trevor.common.bo.PaiXing;
 import com.trevor.common.bo.SocketResult;
 import com.trevor.common.enums.GameStatusEnum;
@@ -34,7 +35,7 @@ public class FaPai1Event extends BaseEvent implements Event {
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
         Integer roomId = data.getRoomId();
-        String runingNum = data.getRuningNum();
+        Integer runingNum = data.getRuningNum();
         //计算得分,将用户的牌型放入paiXingMap,得分和总分放入scoreMap
         calcScore(data, runingNum);
         //改变状态
@@ -61,18 +62,18 @@ public class FaPai1Event extends BaseEvent implements Event {
         scheduleDispatch.addCountDown(new CountDownImpl(roomId, CountDownNum.TWENTY, CountDownFlag.TAN_PAI));
     }
 
-    private void calcScore(NiuniuData data, String runingNum) {
+    private void calcScore(NiuniuData data, Integer runingNum) {
         Set<Integer> paiXing = data.getPaiXing();
         Integer rule = data.getRule();
         Integer basePoint = data.getBasePoint();
         //庄家id
-        String zhuangJiaUserId = data.getZhuangJiaMap().get(runingNum);
+        Integer zhuangJiaUserId = data.getZhuangJiaMap().get(runingNum);
         //抢庄的map
-        Map<String, Integer> qiangZhuangMap = data.getQiangZhuangMap().get(runingNum);
+        Map<Integer, Integer> qiangZhuangMap = data.getQiangZhuangMap().get(runingNum);
         //下注的map
-        Map<String, Integer> xianJiaXiaZhuMap = data.getXiaZhuMap().get(runingNum);
+        Map<Integer, Integer> xianJiaXiaZhuMap = data.getXiaZhuMap().get(runingNum);
         //每个玩家的牌
-        Map<String, List<String>> pokesMap = data.getPokesMap().get(runingNum);
+        Map<Integer, List<String>> pokesMap = data.getPokesMap().get(runingNum);
         //庄家的牌
         List<String> zhuangJiaPokes = pokesMap.get(zhuangJiaUserId);
         //庄家的牌型
@@ -80,17 +81,17 @@ public class FaPai1Event extends BaseEvent implements Event {
         Integer zhuangJiaScore = 0;
         //初始化本局得分
         data.getRuningScoreMap().putIfAbsent(runingNum, new HashMap<>());
-        Map<String, Integer> scoreMap = data.getRuningScoreMap().get(runingNum);
+        Map<Integer, Integer> scoreMap = data.getRuningScoreMap().get(runingNum);
 
         data.getPaiXingMap().put(runingNum, new HashMap<>());
-        Map<String, PaiXing> paiXingMap = data.getPaiXingMap().get(runingNum);
+        Map<Integer, PaiXing> paiXingMap = data.getPaiXingMap().get(runingNum);
         paiXingMap.put(zhuangJiaUserId, zhuangJiaPaiXing);
 
-        Map<String, Integer> totalScoreMap = data.getTotalScoreMap();
+        Map<Integer, Integer> totalScoreMap = data.getTotalScoreMap();
         //庄家的抢庄倍数
         Integer zhuangJiaQiangZhuang = qiangZhuangMap.get(zhuangJiaUserId) == null ? 1 : qiangZhuangMap.get(zhuangJiaUserId);
-        for (Map.Entry<String, List<String>> entry : pokesMap.entrySet()) {
-            String xianJiaUserId = entry.getKey();
+        for (Map.Entry<Integer, List<String>> entry : pokesMap.entrySet()) {
+            Integer xianJiaUserId = entry.getKey();
             if (!Objects.equals(xianJiaUserId, zhuangJiaUserId)) {
                 List<String> xianJiaPokes = entry.getValue();
                 PaiXing xianJiaPaiXing = PokeUtil.isNiuNiu(xianJiaPokes, paiXing, rule);

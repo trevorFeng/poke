@@ -7,12 +7,6 @@ import com.poke.common.bean.enums.MessageCodeEnum;
 import com.poke.common.util.RandomUtils;
 import com.poke.pokeAuth.service.RedisService;
 import com.poke.pokeAuth.service.XianliaoService;
-import com.trevor.auth.service.XianliaoService;
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.bo.ResponseHelper;
-import com.trevor.common.enums.MessageCodeEnum;
-import com.trevor.common.service.RedisService;
-import com.trevor.common.util.RandomUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
@@ -42,7 +36,7 @@ public class XianliaoLoginController {
     private RedisService redisService;
 
     @ApiOperation("得到用户临时凭证uuid")
-    @RequestMapping(value = "/front/xianliao/login/uuid", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/xianliao/login/uuid", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<String> xianliaoForward()  {
         //用户临时凭证
         String uuid = RandomUtils.getRandomChars(40);
@@ -51,7 +45,7 @@ public class XianliaoLoginController {
     }
 
     @ApiOperation("根据code码请求用户信息")
-    @RequestMapping(value = "/front/xianliao/login/user", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/xianliao/login/user", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<String> checkAuth(@RequestParam("uuid") String uuid , @RequestParam("code") String code) throws IOException {
         if (redisService.getValue(uuid) == null) {
             return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.ERROR_NUM_MAX);

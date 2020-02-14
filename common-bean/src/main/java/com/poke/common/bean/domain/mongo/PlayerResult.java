@@ -1,7 +1,6 @@
 package com.poke.common.bean.domain.mongo;
 
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
  * @create: 2019-05-12 20:02
  **/
 @Data
-@Document(collection = "player_result")
+//@Document(collection = "player_result")
 public class PlayerResult {
 
 

@@ -2,7 +2,6 @@ package com.poke.common.client;
 
 import com.poke.common.bean.bo.JsonEntity;
 import com.poke.common.bean.domain.mysql.CardConsumRecord;
-import com.poke.common.bean.domain.mysql.Room;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,9 +1,9 @@
-package com.poke.common.util;
+package com.poke.pokeMessage.util;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.trevor.common.bo.PaiXing;
-import com.trevor.common.enums.NiuNiuPaiXingEnum;
+import com.poke.common.bean.bo.PaiXing;
+import com.poke.common.bean.enums.NiuNiuPaiXingEnum;
 
 import java.util.*;
 import java.util.stream.Collectors;

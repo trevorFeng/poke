@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.poke.common.bean.bo.PaiXing;
 import com.poke.common.bean.enums.GameStatusEnum;
-import com.poke.common.util.PokeUtil;
 import com.poke.common.util.RandomUtils;
 import com.poke.pokeMessage.bo.CountDownNum;
 import com.poke.pokeMessage.bo.NiuniuData;

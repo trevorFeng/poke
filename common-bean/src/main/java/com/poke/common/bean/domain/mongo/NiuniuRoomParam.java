@@ -1,7 +1,6 @@
 package com.poke.common.bean.domain.mongo;
 
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Set;
 
@@ -12,7 +11,7 @@ import java.util.Set;
  * @create: 2019-03-05 22:42
  **/
 @Data
-@Document(collection = "niuniu_room_param")
+//@Document(collection = "niuniu_room_param")
 public class NiuniuRoomParam {
 
     /**

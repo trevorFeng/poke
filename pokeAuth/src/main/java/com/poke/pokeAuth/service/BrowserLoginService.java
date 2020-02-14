@@ -49,8 +49,8 @@ public class BrowserLoginService{
      * @param phoneNum
      * @return
      */
-    public JsonEntity<User> getUserHashAndOpenidByPhoneNum(String phoneNum) {
+    public User getUserHashAndOpenidByPhoneNum(String phoneNum) {
         User user = userService.getUserByPhoneNumContainOpenidAndHash(phoneNum);
-        return ResponseHelper.createInstance(user ,MessageCodeEnum.QUERY_SUCCESS);
+        return user;
     }
 }
