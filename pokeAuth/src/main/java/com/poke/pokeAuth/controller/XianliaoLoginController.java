@@ -53,7 +53,9 @@ public class XianliaoLoginController {
         JsonEntity<String> jsonEntity = xianliaoService.weixinAuth(code);
         //授权成功
         if(jsonEntity.getCode() > 0){
-            //SessionUtil.setToken(jsonEntity.getData());
+            //存入redis，过期时间为7天
+            redisService.setValueWithExpire("acess_token:" + jsonEntity.getData() ,String.valueOf(System.currentTimeMillis())
+                    ,7 * 24 * 60 * 60L , TimeUnit.MILLISECONDS);
             return jsonEntity;
         }else {
             return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.AUTH_FAILED);

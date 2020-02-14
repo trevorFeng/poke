@@ -32,5 +32,32 @@ public class UserController {
         return ResponseHelper.createInstance(userService.findUserById(userId) , MessageCodeEnum.HANDLER_SUCCESS);
     }
 
+    @RequestMapping(value = "/api/user/query/phoneNum/{phoneNum}" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<User> findByPhoneNum(@PathVariable String phoneNum) {
+        return ResponseHelper.createInstance(userService.findPhoneNum(phoneNum) , MessageCodeEnum.HANDLER_SUCCESS);
+    }
+
+    @RequestMapping(value = "/api/user/save" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<Object> saveUser(@RequestBody User user){
+        userService.saveUser(user);
+        return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.HANDLER_SUCCESS);
+    }
+
+    @RequestMapping(value = "/api/user/isExist/opnenId/{openid}" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<Boolean> isExistByOpnenId(@PathVariable String openid) {
+        return ResponseHelper.createInstance(userService.isExistByOpnenId(openid) , MessageCodeEnum.HANDLER_SUCCESS);
+    }
+
+    @RequestMapping(value = "/api/user/update/user" ,method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<Object> updateUser(@RequestBody User user){
+        userService.updateUser(user);
+        return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.HANDLER_SUCCESS);
+    }
+
+    @RequestMapping(value = "/api/user/isExist/phoneNum/{phoneNum}" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<Boolean> isExistByPhoneNum(@PathVariable String phoneNum) {
+        return ResponseHelper.createInstance(userService.isExistByPhoneNum(phoneNum) , MessageCodeEnum.HANDLER_SUCCESS);
+    }
+
 
 }

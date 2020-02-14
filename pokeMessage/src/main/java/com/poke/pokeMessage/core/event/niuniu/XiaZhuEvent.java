@@ -7,13 +7,6 @@ import com.poke.pokeMessage.bo.RoomData;
 import com.poke.pokeMessage.bo.Task;
 import com.poke.pokeMessage.core.event.BaseEvent;
 import com.poke.pokeMessage.core.event.Event;
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.message.bo.NiuniuData;
-import com.trevor.message.bo.RoomData;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -29,9 +22,9 @@ public class XiaZhuEvent extends BaseEvent implements Event {
         String gameStatus = data.getGameStatus();
         Integer playerId = task.getPlayId();
         Integer roomId = task.getRoomId();
-        String runingNum = data.getRuningNum();
+        Integer runingNum = data.getRuningNum();
         Set<Integer> readyPlayers = data.getReadyPlayMap().get(runingNum);
-        String zhuangJiaId = data.getZhuangJiaMap().get(runingNum);
+        Integer zhuangJiaId = data.getZhuangJiaMap().get(runingNum);
         Set<Integer> players = data.getPlayers();
         //校验状态
         if (!Objects.equals(gameStatus, GameStatusEnum.XIA_ZHU_COUNT_DOWN_START.getCode())) {

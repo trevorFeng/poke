@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -27,17 +28,20 @@ public class XianliaoAuthUtils {
      * 通过code换取网页授权access_token
      */
     public static Map<String, String> getXianliaoToken(String code) throws IOException {
-        String url = ACCESS_TOKEN_BASE_URL;
         FormBody formBody = new FormBody.Builder()
                 .add("appid", WebKeys.XIANLIAO_APPID)
                 .add("appsecret", WebKeys.XIANLIAO_APP_SECRET)
                 .add("grant_type", WebKeys.GRANT_TYPE)
                 .add("code" ,code)
                 .build();
-        String res = HttpUtil.httpPost(url ,formBody);
-        Map<String, String> resMap = JSON.parseObject(res ,Map.class);
+        String res = HttpUtil.httpPost(ACCESS_TOKEN_BASE_URL ,formBody);
+        Map<String, Object> resMap = JSON.parseObject(res);
+        Map<String ,String> map = new HashMap<>();
+        for (Map.Entry<String ,Object> entry : resMap.entrySet()){
+            map.put(entry.getKey() ,(String) entry.getValue());
+        }
         log.info("通过code换取网页授权access_token 返回结果:-------------------------" + resMap.toString());
-        return resMap;
+        return map;
     }
 
     /**
@@ -46,31 +50,37 @@ public class XianliaoAuthUtils {
      * refresh_token有效期为30天，当refresh_token失效之后，需要用户重新授权。
      */
     public static Map<String, String> getXianliaoTokenByRefreshToken(String refresh_token) throws IOException {
-        String url = ACCESS_TOKEN_BASE_URL;
         FormBody formBody = new FormBody.Builder()
                 .add("appid", WebKeys.XIANLIAO_APPID)
                 .add("appsecret", WebKeys.XIANLIAO_APP_SECRET)
                 .add("grant_type", WebKeys.GRANT_TYPE)
                 .add("refresh_token" ,refresh_token)
                 .build();
-        String res = HttpUtil.httpPost(url ,formBody);
-        Map<String, String> resMap = JSON.parseObject(res ,Map.class);
+        String res = HttpUtil.httpPost(ACCESS_TOKEN_BASE_URL ,formBody);
+        Map<String, Object> resMap = JSON.parseObject(res);
+        Map<String ,String> map = new HashMap<>();
+        for (Map.Entry<String ,Object> entry : resMap.entrySet()){
+            map.put(entry.getKey() ,(String) entry.getValue());
+        }
         System.out.println("刷新access_token 返回结果:---------------------------------" + resMap);
-        return resMap;
+        return map;
     }
 
     /**
      * 拉取用户信息
      */
     public static Map<String, String> getUserInfo(String access_token) throws IOException {
-        String url = USER_INFO_URL;
         FormBody formBody = new FormBody.Builder()
                 .add(WebKeys.ACCESS_TOKEN ,access_token)
                 .build();
-        String res = HttpUtil.httpPost(url ,formBody);
-        Map<String, String> resMap = JSON.parseObject(res ,Map.class);
+        String res = HttpUtil.httpPost(USER_INFO_URL ,formBody);
+        Map<String, Object> resMap = JSON.parseObject(res);
         log.info("拉取用户信息 返回结果:------------------------------------- " + resMap.toString());
-        return resMap;
+        Map<String ,String> map = new HashMap<>();
+        for (Map.Entry<String ,Object> entry : resMap.entrySet()){
+            map.put(entry.getKey() ,(String) entry.getValue());
+        }
+        return map;
     }
 
 

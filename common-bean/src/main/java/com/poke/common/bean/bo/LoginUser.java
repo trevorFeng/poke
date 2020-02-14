@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class LoginUser {
 
-    private Long id;
+    private Integer id;
 
     /**
      * 用户昵称
@@ -25,7 +25,7 @@ public class LoginUser {
     /**
      * 是否开启好友管理，1为是，0为否
      */
-    private Integer friendManageFlag;
+    private Byte friendManageFlag;
 
     /**
      * 房卡数量

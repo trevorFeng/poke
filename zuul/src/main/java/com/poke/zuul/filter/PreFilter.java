@@ -36,7 +36,7 @@ public class PreFilter extends ZuulFilter {
         RequestContext requestContext = RequestContext.getCurrentContext();
         HttpServletRequest request = requestContext.getRequest();
         String uri = request.getRequestURI();
-        if (uri.startsWith("/pokeAuth")) {
+        if (uri.startsWith("/auth")) {
             return false;
         }else {
             return true;

@@ -7,6 +7,8 @@ import com.poke.common.bean.bo.Player;
 import com.poke.common.bean.bo.SocketResult;
 import com.poke.common.bean.domain.mysql.User;
 import com.poke.common.bean.enums.GameStatusEnum;
+import com.poke.common.bean.enums.RoomTypeEnum;
+import com.poke.common.bean.enums.SpecialEnum;
 import com.poke.pokeMessage.bo.NiuniuData;
 import com.poke.pokeMessage.bo.RoomData;
 import com.poke.pokeMessage.bo.Task;
@@ -26,7 +28,7 @@ public class JoinRoomEvent extends BaseEvent implements Event {
         NiuniuData data = (NiuniuData) roomData;
         NiuniuSocket socket = (NiuniuSocket) task.getSocket();
         //当前局数
-        String runingNum = data.getRuningNum();
+        Integer runingNum = data.getRuningNum();
         //房主是否开启好友管理功能
         Boolean isFriendManage = task.getIsFriendManage();
         //加入的玩家是否是房主的好友
@@ -49,7 +51,7 @@ public class JoinRoomEvent extends BaseEvent implements Event {
         Integer playerId = task.getPlayId();
         Integer roomId = task.getRoomId();
         Set<Integer> players = data.getPlayers();
-        Map<String, Integer> totalScoreMap = data.getTotalScoreMap();
+        Map<Integer, Integer> totalScoreMap = data.getTotalScoreMap();
 
         //加入定时刷消息的socketMap
         socketService.join(socket);
@@ -79,8 +81,8 @@ public class JoinRoomEvent extends BaseEvent implements Event {
         }
     }
 
-    private void setNewPlayerTotalScore(SocketResult soc ,Map<String, Integer> totalScoreMap ,
-                                        Map<String ,Integer> runingScoreMap ,String gameStatus ,String playerId){
+    private void setNewPlayerTotalScore(SocketResult soc ,Map<Integer, Integer> totalScoreMap ,
+                                        Map<Integer ,Integer> runingScoreMap ,String gameStatus ,Integer playerId){
         if (runingScoreMap == null) {
             runingScoreMap = new HashMap<>();
         }
@@ -114,8 +116,8 @@ public class JoinRoomEvent extends BaseEvent implements Event {
      * @param totalScoreMap
      * @param task
      */
-    private void sendToNewPlayer(SocketResult soc ,NiuniuData data ,Set<String> disConnections ,
-                              Map<String, Integer> totalScoreMap ,Task task){
+    private void sendToNewPlayer(SocketResult soc ,NiuniuData data ,Set<Integer> disConnections ,
+                              Map<Integer, Integer> totalScoreMap ,Task task){
         soc.setHead(2002);
         //设置房间正在运行的局数
         soc.setRuningAndTotal(Integer.valueOf(data.getRuningNum()) + "/" + Integer.valueOf(data.getTotalNum()));
@@ -169,7 +171,7 @@ public class JoinRoomEvent extends BaseEvent implements Event {
      */
     private SocketResult dealCanSee(User user, Set<Integer> special, Integer realPlayersSize, Integer roomType) {
         SocketResult socketResult = new SocketResult();
-        socketResult.setUserId(String.valueOf(user.getId()));
+        socketResult.setUserId(user.getId());
         socketResult.setName(user.getAppName());
         socketResult.setPictureUrl(user.getAppPictureUrl());
         Boolean bo = realPlayersSize < RoomTypeEnum.getRoomNumByType(roomType);
@@ -198,14 +200,14 @@ public class JoinRoomEvent extends BaseEvent implements Event {
      *
      * @return
      */
-    private List<Player> getRealRoomPlayerCount(Set<String> realUserIds, Set<String> guanZhongUserIds,
-                                                Map<String, Integer> totalScoreMap , Map<String ,Integer> runingScoreMap ,
+    private List<Player> getRealRoomPlayerCount(Set<Integer> realUserIds, Set<Integer> guanZhongUserIds,
+                                                Map<Integer, Integer> totalScoreMap , Map<Integer ,Integer> runingScoreMap ,
                                                 String gameStatus) {
-        List<Long> userIds = Lists.newArrayList();
-        for (String s : realUserIds) {
-            userIds.add(Long.valueOf(s));
+        List<Integer> userIds = Lists.newArrayList();
+        for (Integer s : realUserIds) {
+            userIds.add(s);
         }
-        List<User> users = userService.findUsersByIds(userIds);
+        List<User> users = userDbClient.findByUserIdList(userIds).getData();
 
         List<Player> players = Lists.newArrayList();
         for (User user : users) {
@@ -223,8 +225,8 @@ public class JoinRoomEvent extends BaseEvent implements Event {
         return players;
     }
 
-    private void setPlayerTotalScore(Player player ,Map<String, Integer> totalScoreMap ,
-                                        Map<String ,Integer> runingScoreMap ,String gameStatus){
+    private void setPlayerTotalScore(Player player ,Map<Integer, Integer> totalScoreMap ,
+                                        Map<Integer ,Integer> runingScoreMap ,String gameStatus){
         String playerId = player.getUserId().toString();
         if (runingScoreMap == null) {
             runingScoreMap = new HashMap<>();
@@ -244,7 +246,7 @@ public class JoinRoomEvent extends BaseEvent implements Event {
      */
     private void welcome(NiuniuData data, Task task, SocketResult socketResult) {
         String gameStatus = data.getGameStatus();
-        String runingNum = data.getRuningNum();
+        Integer runingNum = data.getRuningNum();
         Integer userId = task.getPlayId();
         Set<Integer> readyPlayers = data.getReadyPlayMap().get(runingNum);
         socketResult.setGameStatus(gameStatus);
@@ -301,13 +303,13 @@ public class JoinRoomEvent extends BaseEvent implements Event {
 
     }
 
-    private void setLastPoke(NiuniuData data, String runingNum, SocketResult socketResult) {
+    private void setLastPoke(NiuniuData data, Integer runingNum, SocketResult socketResult) {
         socketResult.setUserPokeMap_5(data.getPokesMap().get(runingNum));
         socketResult.setZhuangJiaUserId(data.getZhuangJiaMap().get(runingNum));
         socketResult.setXianJiaXiaZhuMap(data.getXiaZhuMap().get(runingNum));
         socketResult.setScoreMap(data.getRuningScoreMap().get(runingNum));
-        Map<String, Integer> map = Maps.newHashMap();
-        for (Map.Entry<String, PaiXing> entry : data.getPaiXingMap().get(runingNum).entrySet()) {
+        Map<Integer, Integer> map = Maps.newHashMap();
+        for (Map.Entry<Integer, PaiXing> entry : data.getPaiXingMap().get(runingNum).entrySet()) {
             map.put(entry.getKey(), entry.getValue().getPaixing());
         }
         socketResult.setPaiXing(map);

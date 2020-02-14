@@ -41,12 +41,6 @@ BrowserLoginController {
     private BrowserLoginService browserLoginService;
 
     @Resource
-    private HttpServletRequest request;
-
-    @Resource
-    private HttpServletResponse response;
-
-    @Resource
     private RedisService redisService;
 
     @ApiOperation("生成验证码,给用户发送验证码")
@@ -78,6 +72,9 @@ BrowserLoginController {
             claims.put("openid", user.getOpenId());
             claims.put("timestamp", System.currentTimeMillis());
             String token = TokenUtil.generateToken(claims);
+            //存入redis，过期时间为7天
+            redisService.setValueWithExpire("acess_token:" + token ,String.valueOf(System.currentTimeMillis())
+                    ,7 * 24 * 60 * 60L , TimeUnit.MILLISECONDS);
             return ResponseHelper.createInstance(token ,MessageCodeEnum.AUTH_SUCCESS);
         }else {
             return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.CODE_ERROR);

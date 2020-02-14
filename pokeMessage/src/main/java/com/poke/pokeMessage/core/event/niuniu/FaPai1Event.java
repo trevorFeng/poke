@@ -10,15 +10,6 @@ import com.poke.pokeMessage.core.event.BaseEvent;
 import com.poke.pokeMessage.core.event.Event;
 import com.poke.pokeMessage.core.schedule.CountDownImpl;
 import com.poke.pokeMessage.util.PokeUtil;
-import com.trevor.common.bo.PaiXing;
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.common.enums.NiuNiuPaiXingEnum;
-import com.trevor.common.util.PokeUtil;
-import com.trevor.message.bo.*;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
-import com.trevor.message.core.schedule.CountDownImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -41,17 +32,17 @@ public class FaPai1Event extends BaseEvent implements Event {
         //改变状态
         data.setGameStatus(GameStatusEnum.FA_ONE_PAI.getCode());
 
-        Map<String, List<String>> userPokeMap_5 = new HashMap<>(2 << 4);
-        Map<String, List<String>> map = data.getPokesMap().get(runingNum);
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+        Map<Integer, List<String>> userPokeMap_5 = new HashMap<>(2 << 4);
+        Map<Integer, List<String>> map = data.getPokesMap().get(runingNum);
+        for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
             userPokeMap_5.put(entry.getKey(), entry.getValue());
         }
         SocketResult socketResult = new SocketResult(1008, userPokeMap_5);
         socketResult.setScoreMap(data.getRuningScoreMap().get(runingNum));
 
 
-        Map<String, Integer> playerPaiXingMap = new HashMap<>();
-        for (Map.Entry<String, PaiXing> entry : data.getPaiXingMap().get(runingNum).entrySet()) {
+        Map<Integer, Integer> playerPaiXingMap = new HashMap<>();
+        for (Map.Entry<Integer, PaiXing> entry : data.getPaiXingMap().get(runingNum).entrySet()) {
             playerPaiXingMap.put(entry.getKey(), entry.getValue().getPaixing());
         }
         socketResult.setPaiXing(playerPaiXingMap);

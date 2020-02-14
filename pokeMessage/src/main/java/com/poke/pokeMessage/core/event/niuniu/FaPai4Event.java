@@ -3,24 +3,14 @@ package com.poke.pokeMessage.core.event.niuniu;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.poke.common.bean.bo.PaiXing;
+import com.poke.common.bean.bo.SocketResult;
 import com.poke.common.bean.enums.GameStatusEnum;
 import com.poke.common.util.RandomUtils;
-import com.poke.pokeMessage.bo.CountDownNum;
-import com.poke.pokeMessage.bo.NiuniuData;
-import com.poke.pokeMessage.bo.RoomData;
-import com.poke.pokeMessage.bo.Task;
+import com.poke.pokeMessage.bo.*;
 import com.poke.pokeMessage.core.event.BaseEvent;
 import com.poke.pokeMessage.core.event.Event;
 import com.poke.pokeMessage.core.schedule.CountDownImpl;
-import com.trevor.common.bo.PaiXing;
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.common.util.PokeUtil;
-import com.trevor.common.util.RandomUtils;
-import com.trevor.message.bo.*;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
-import com.trevor.message.core.schedule.CountDownImpl;
+import com.poke.pokeMessage.util.PokeUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,9 +23,9 @@ public class FaPai4Event extends BaseEvent implements Event {
     @Override
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
-        String runingNum = data.getRuningNum();
+        Integer runingNum = data.getRuningNum();
         Integer roomId = data.getRoomId();
-        Map<String, List<String>> userAlreadyPokesMap = data.getPokesMap().get(runingNum);
+        Map<Integer, List<String>> userAlreadyPokesMap = data.getPokesMap().get(runingNum);
         //判断下这个任务是否已经执行过
         if (userAlreadyPokesMap != null && !userAlreadyPokesMap.isEmpty()) {
             return;
@@ -55,9 +45,9 @@ public class FaPai4Event extends BaseEvent implements Event {
         scheduleDispatch.addCountDown(new CountDownImpl(data.getRoomId(), CountDownNum.TWENTY, CountDownFlag.NIUNIU_QIANG_ZHUANG));
     }
 
-    private void faPai(Map<String, List<String>> pokesMap, Set<Integer> readyPlayerUserIds, Set<Integer> players, Integer roomId) {
+    private void faPai(Map<Integer, List<String>> pokesMap, Set<Integer> readyPlayerUserIds, Set<Integer> players, Integer roomId) {
         //给每个人发牌
-        for (String playerId : players) {
+        for (Integer playerId : players) {
             if (readyPlayerUserIds.contains(playerId)) {
                 List<String> userPokeList_4 = pokesMap.get(playerId).subList(0, 4);
                 SocketResult soc = new SocketResult(1004, userPokeList_4);

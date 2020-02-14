@@ -1,6 +1,6 @@
 package com.poke.dbservice.dao.mongo;
 
-import com.poke.common.bean.domain.mongo.NiuniuRoomParam;
+import com.poke.dbservice.domain.NiuniuRoomParam;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;

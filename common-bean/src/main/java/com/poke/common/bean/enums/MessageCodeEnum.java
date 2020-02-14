@@ -69,7 +69,9 @@ public enum MessageCodeEnum {
 
     NAME_ERROR(-10 ,"名字需为6位数字"),
 
-    NAME_REPEAT(-11 ,"名字重复"),
+    NAME_REPEAT(-11 ,"手机号已存在"),
+
+    NAME_NOT_EXISTS(-11 ,"手机号不存在"),
 
     NAME_EMPTY(-12 ,"名字不存在"),
 

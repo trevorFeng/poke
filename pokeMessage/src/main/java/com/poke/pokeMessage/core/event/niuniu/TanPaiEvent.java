@@ -27,7 +27,7 @@ public class TanPaiEvent extends BaseEvent implements Event {
             socketService.sendToUserMessage(playerId, new SocketResult(-501), roomId);
             return;
         }
-        String runingNum = data.getRuningNum();
+        Integer runingNum = data.getRuningNum();
         Set<Integer> readyPlayers = data.getReadyPlayMap().get(runingNum);
         if (!readyPlayers.contains(playerId)) {
             socketService.sendToUserMessage(playerId, new SocketResult(-503), roomId);

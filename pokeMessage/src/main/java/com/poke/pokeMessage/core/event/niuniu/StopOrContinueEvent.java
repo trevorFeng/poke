@@ -40,7 +40,7 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
 
         //结束
         if (isOver) {
-            roomDbClient.updateStatus(Long.valueOf(roomId), 2, runingNum);
+            //roomDbClient.updateStatus(Long.valueOf(roomId), 2, runingNum);
             SocketResult socketResult = new SocketResult(1013);
             socketResult.setGameStatus(GameStatusEnum.STOP.getCode());
             socketResult.setTanPaiPlayerUserIds(data.getTanPaiMap().get(runingNum));
@@ -50,10 +50,10 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
         } else {
             Integer next = runingNum + 1;
 
-            roomDbClient.updateRuningNum(Long.valueOf(roomId), runingNum);
+            //roomDbClient.updateRuningNum(Long.valueOf(roomId), runingNum);
 
             data.setGameStatus(GameStatusEnum.READY.getCode());
-            data.setRuningNum(next.toString());
+            data.setRuningNum(next);
 
             SocketResult socketResult = new SocketResult();
             socketResult.setHead(1016);
@@ -65,17 +65,17 @@ public class StopOrContinueEvent extends BaseEvent implements Event {
 
     private List<PlayerResult> generatePlayerResults(Integer roomId, NiuniuData data) {
         Long entryDatetime = System.currentTimeMillis();
-        String runingNum = data.getRuningNum();
-        Map<String, Integer> scoreMap = data.getRuningScoreMap().get(runingNum);
+        Integer runingNum = data.getRuningNum();
+        Map<Integer, Integer> scoreMap = data.getRuningScoreMap().get(runingNum);
         Set<Integer> readyPlayerSet = data.getReadyPlayMap().get(runingNum);
         List<Integer> readyPlayerList = Lists.newArrayList();
         for (Integer playerId : readyPlayerSet) {
             readyPlayerList.add(playerId);
         }
         List<User> users = userDbClient.findByUserIdList(readyPlayerList).getData();
-        String zhuangJiaId = data.getZhuangJiaMap().get(runingNum);
-        Map<String, Integer> totalScoreMap = data.getTotalScoreMap();
-        Map<String, List<String>> pokesMap = data.getPokesMap().get(runingNum);
+        Integer zhuangJiaId = data.getZhuangJiaMap().get(runingNum);
+        Map<Integer, Integer> totalScoreMap = data.getTotalScoreMap();
+        Map<Integer, List<String>> pokesMap = data.getPokesMap().get(runingNum);
         Map<Integer, PaiXing> paiXingMap = data.getPaiXingMap().get(runingNum);
         List<PlayerResult> playerResults = new ArrayList<>();
         for (User user : users) {

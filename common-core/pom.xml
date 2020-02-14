@@ -14,21 +14,17 @@
     <artifactId>common-core</artifactId>
 
     <dependencies>
-        <!-- feign模块 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
+<!--        &lt;!&ndash; feign模块 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-openfeign</artifactId>-->
+<!--        </dependency>-->
         <!-- web模块 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.poke</groupId>-->
-<!--            <artifactId>common-bean</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--        </dependency>-->
+
         <dependency>
             <groupId>com.poke</groupId>
             <artifactId>common-util</artifactId>

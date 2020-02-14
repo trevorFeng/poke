@@ -1,6 +1,5 @@
 package com.poke.common.util;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -11,7 +10,7 @@ import java.io.InputStream;
  * @author trevor
  * @date 2019/3/4 12:56
  */
-@Slf4j
+
 public class FileUtil {
 
     /**
@@ -28,7 +27,6 @@ public class FileUtil {
                 FileUtils.copyInputStreamToFile(in, new File(
                         directoryPath, fileName));
             } catch (IOException e) {
-                log.error("保存文件错误" ,e);
                 return false;
             }
         }else {
@@ -37,7 +35,6 @@ public class FileUtil {
                 FileUtils.copyInputStreamToFile(in, new File(
                         directoryPath, fileName));
             } catch (IOException e) {
-                log.error("保存文件错误");
                 return false;
             }
         }

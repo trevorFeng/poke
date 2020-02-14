@@ -1,16 +1,9 @@
-package com.trevor.general.interceptor;
+package com.poke.common.core;
 
-import com.poke.common.core.FeignUserContextInterceptor;
 import com.poke.common.core.UserConTextInterceptor;
-import feign.Feign;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.annotation.Resource;
 
 /**
  * @Auther: trevor
@@ -29,15 +22,15 @@ public class InterceptorConfigurer implements WebMvcConfigurer {
         registry.addInterceptor(new UserConTextInterceptor()).addPathPatterns("/**");
     }
 
-    /**
-     * 创建Feign请求拦截器，在发送请求前设置header的token
-     * @return
-     */
-    @Bean
-    @ConditionalOnClass(Feign.class)
-    public FeignUserContextInterceptor feignTokenInterceptor(){
-        return new FeignUserContextInterceptor();
-    }
+//    /**
+//     * 创建Feign请求拦截器，在发送请求前设置header的token
+//     * @return
+//     */
+//    @Bean
+//    @ConditionalOnClass(Feign.class)
+//    public FeignUserContextInterceptor feignTokenInterceptor(){
+//        return new FeignUserContextInterceptor();
+//    }
 
 
 

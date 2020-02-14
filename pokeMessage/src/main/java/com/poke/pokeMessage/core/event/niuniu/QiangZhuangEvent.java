@@ -7,13 +7,6 @@ import com.poke.pokeMessage.bo.RoomData;
 import com.poke.pokeMessage.bo.Task;
 import com.poke.pokeMessage.core.event.BaseEvent;
 import com.poke.pokeMessage.core.event.Event;
-import com.trevor.common.bo.SocketResult;
-import com.trevor.common.enums.GameStatusEnum;
-import com.trevor.message.bo.NiuniuData;
-import com.trevor.message.bo.RoomData;
-import com.trevor.message.bo.Task;
-import com.trevor.message.core.event.BaseEvent;
-import com.trevor.message.core.event.Event;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -28,7 +21,7 @@ public class QiangZhuangEvent extends BaseEvent implements Event {
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
         //当前局数
-        String runingNum = data.getRuningNum();
+        Integer runingNum = data.getRuningNum();
         //当前的房间状态
         String gameStatus = data.getGameStatus();
         Integer roomId = data.getRoomId();

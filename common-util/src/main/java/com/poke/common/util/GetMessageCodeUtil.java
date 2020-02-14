@@ -1,7 +1,6 @@
 package com.poke.common.util;
 
 import com.alibaba.fastjson.JSONObject;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,7 +11,6 @@ import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Slf4j
 public class GetMessageCodeUtil {
 
     private static final String QUERY_PATH = "https://api.miaodiyun.com/20150822/industrySMS/sendSMS";
@@ -60,7 +58,6 @@ public class GetMessageCodeUtil {
                 result.append(temp);
             }
         } catch (Exception e) {
-            log.error("验证码发送失败");
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -123,7 +120,6 @@ public class GetMessageCodeUtil {
                 }
             }
         } catch (Exception e) {
-            log.error(e.toString());
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

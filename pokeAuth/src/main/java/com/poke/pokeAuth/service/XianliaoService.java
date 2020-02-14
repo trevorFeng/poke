@@ -6,19 +6,11 @@ import com.poke.common.bean.bo.WebKeys;
 import com.poke.common.bean.domain.mysql.PersonalCard;
 import com.poke.common.bean.domain.mysql.User;
 import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.common.client.PersonalCardDbClient;
+import com.poke.common.client.UserDbClient;
 import com.poke.common.util.RandomUtils;
+import com.poke.common.util.TokenUtil;
 import com.poke.pokeAuth.util.XianliaoAuthUtils;
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.bo.ResponseHelper;
-import com.trevor.common.bo.WebKeys;
-import com.trevor.common.dao.mysql.PersonalCardMapper;
-import com.trevor.common.domain.mysql.PersonalCard;
-import com.trevor.common.domain.mysql.User;
-import com.trevor.common.enums.MessageCodeEnum;
-import com.trevor.common.service.UserService;
-import com.trevor.common.util.RandomUtils;
-import com.trevor.common.util.TokenUtil;
-import com.trevor.common.util.XianliaoAuthUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author trevor
@@ -38,10 +31,10 @@ import java.util.Objects;
 public class XianliaoService{
 
     @Resource
-    private UserService userService;
+    private UserDbClient userDbClient;
 
     @Resource
-    private PersonalCardMapper personalCardMapper;
+    private PersonalCardDbClient personalCardDbClient;
 
     /**
      * 根据code获取闲聊用户基本信息
@@ -66,7 +59,7 @@ public class XianliaoService{
             return ResponseHelper.withErrorInstance(MessageCodeEnum.AUTH_FAILED);
         } else {
             //判断用户是否存在
-            Boolean isExist = userService.isExistByOpnenId(openid);
+            Boolean isExist = userDbClient.isExistByOpnenId(openid).getData();
             Map<String,Object> claims = new HashMap<>(2<<4);
             if (!isExist) {
                 //新增
@@ -78,15 +71,15 @@ public class XianliaoService{
                 user.setHash(hash);
                 user.setType((byte)1);
                 user.setFriendManageFlag((byte)0);
-                userService.insertOne(user);
+                userDbClient.save(user);
                 //新增用户房卡记录
                 PersonalCard personalCard = new PersonalCard();
                 personalCard.setUserId(user.getId());
                 personalCard.setRoomCardNum(0);
-                personalCardMapper.insertOne(personalCard);
+                personalCardDbClient.save(personalCard);
 
                 claims.put("hash" ,user.getHash());
-                claims.put("openid" ,user.getOpenid());
+                claims.put("openid" ,user.getOpenId());
                 claims.put("timestamp" ,System.currentTimeMillis());
             } else {
                 //更新头像，昵称，hash
@@ -95,10 +88,10 @@ public class XianliaoService{
                 user.setAppName(userInfoMap.get("nickName"));
                 user.setHash(hash);
                 user.setAppPictureUrl(userInfoMap.get("smallAvatar"));
-                userService.updateUser(user);
+                userDbClient.updateUser(user);
 
-                claims.put("hash" ,user.getHash());
-                claims.put("openid" ,user.getOpenid());
+                claims.put("userid" ,user.getId());
+                claims.put("openid" ,user.getOpenId());
                 claims.put("timestamp" ,System.currentTimeMillis());
             }
             String token = TokenUtil.generateToken(claims);

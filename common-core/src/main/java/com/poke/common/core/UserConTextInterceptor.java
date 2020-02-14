@@ -20,9 +20,8 @@ public class UserConTextInterceptor extends HandlerInterceptorAdapter {
         if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
-        String openid = request.getHeader("openid");
         String userid = request.getHeader("userid");
-        User user = userDbClient.findByOpenidAndUserId(openid ,Integer.valueOf(userid)).getData();
+        User user = userDbClient.findByUserId(Integer.valueOf(userid)).getData();
         UserContextHolder.set(user);
         return Boolean.TRUE;
     }

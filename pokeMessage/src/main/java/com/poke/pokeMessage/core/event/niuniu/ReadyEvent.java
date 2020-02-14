@@ -30,7 +30,7 @@ public class ReadyEvent extends BaseEvent implements Event {
         //总局数
         String totalNum = data.getTotalNum();
         //当前局数
-        String runingNum = data.getRuningNum();
+        Integer runingNum = data.getRuningNum();
         //房间里的玩家
         Set<Integer> players = data.getPlayers();
         //当前的房间状态
@@ -45,7 +45,7 @@ public class ReadyEvent extends BaseEvent implements Event {
                 socketService.sendToUserMessage(userId, socketResult, roomId);
                 return;
             } else {
-                String nextRuningNum = Integer.valueOf(runingNum) + 1 + "";
+                Integer nextRuningNum = runingNum + 1;
                 data.getReadyPlayMap().putIfAbsent(nextRuningNum, new HashSet<>());
                 data.getReadyPlayMap().get(runingNum).add(userId);
 

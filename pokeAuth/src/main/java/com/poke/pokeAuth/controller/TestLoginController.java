@@ -2,29 +2,30 @@ package com.poke.pokeAuth.controller;
 
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.trevor.auth.bo.TestLogin;
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.bo.ResponseHelper;
-import com.trevor.common.dao.mysql.PersonalCardMapper;
-import com.trevor.common.domain.mysql.PersonalCard;
-import com.trevor.common.domain.mysql.User;
-import com.trevor.common.enums.MessageCodeEnum;
-import com.trevor.common.service.UserService;
-import com.trevor.common.util.RandomUtils;
-import com.trevor.common.util.TokenUtil;
+import com.poke.common.bean.bo.JsonEntity;
+import com.poke.common.bean.bo.ResponseHelper;
+import com.poke.common.bean.domain.mysql.PersonalCard;
+import com.poke.common.bean.domain.mysql.User;
+import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.common.client.PersonalCardDbClient;
+import com.poke.common.client.UserDbClient;
+import com.poke.common.util.RandomUtils;
+import com.poke.common.util.TokenUtil;
+import com.poke.pokeAuth.service.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 一句话描述该类作用:【】
@@ -32,56 +33,31 @@ import java.util.Map;
  * @author: trevor
  * @create: 2019-03-14 0:56
  **/
-@Api(value = "测试用暂时登录" ,description = "测试用暂时登录")
+@Api(value = "浏览器测试暂时登录" ,description = "浏览器测试暂时登录")
 @RestController
 @Slf4j
 public class TestLoginController {
 
     @Resource
-    private UserService userService;
+    private UserDbClient userDbClient;
 
     @Resource
-    private PersonalCardMapper personalCardMapper;
+    private PersonalCardDbClient personalCardDbClient;
 
-    @ApiOperation("根据名字得到tokenid")
-    @RequestMapping(value = "/api/denglu/login", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public JsonEntity<TestLogin> getTokenAndUserId(@RequestParam Integer name){
-        if (name < 100000 || name > 999999) {
-            return ResponseHelper.withErrorInstance(MessageCodeEnum.NAME_ERROR);
-        }
-        User byName = userService.findByName(name.toString());
-        if (byName == null) {
-            return ResponseHelper.withErrorInstance(MessageCodeEnum.NAME_EMPTY);
-        }
-        Map<String, Object> claims = Maps.newHashMap();
-        claims.put("openid" ,byName.getOpenid());
-        claims.put("hash" ,byName.getHash());
-        claims.put("timestamp" ,System.currentTimeMillis());
-        String token = TokenUtil.generateToken(claims);
+    @Resource
+    private RedisService redisService;
 
-        TestLogin testLogin = new TestLogin();
-        testLogin.setToken(token);
-        testLogin.setUserId(byName.getId());
-
-        return ResponseHelper.createInstance(testLogin ,MessageCodeEnum.HANDLER_SUCCESS);
-    }
-
-
-
-
-    @ApiOperation("注册用户")
-    @RequestMapping(value = "/api/zhuCe/login", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public JsonEntity<Object> zhuCe(@RequestParam Integer name){
-        if (name < 100000 || name > 999999) {
-            return ResponseHelper.withErrorInstance(MessageCodeEnum.NAME_ERROR);
-        }
-        User byName = userService.findByName(name.toString());
-        if (byName != null) {
+    @ApiOperation("根据手机号注册用户")
+    @RequestMapping(value = "/api/zhuCe/phoneNum/{phoneNum}", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<Object> zhuCe(@PathVariable String phoneNum){
+        User user = userDbClient.findByPhoneNum(phoneNum).getData();
+        if (user != null) {
             return ResponseHelper.withErrorInstance(MessageCodeEnum.NAME_REPEAT);
         }
 
         String openid = System.currentTimeMillis() + "";
-        String hash = RandomUtils.getRandomChars(20);
+
+        String name = RandomUtils.getRandNum();
 
         List<String> tupianList = Lists.newArrayList();
         tupianList.add("http://hbimg.b0.upaiyun.com/fc4285d30a2d667304b9ef3c0d820b97a6e402933669d-QfsNiI_fw658");
@@ -90,68 +66,42 @@ public class TestLoginController {
         tupianList.add("http://img3.imgtn.bdimg.com/it/u=809705136,1148759487&fm=26&gp=0.jpg");
         tupianList.add("http://img5.imgtn.bdimg.com/it/u=3275347102,446490913&fm=26&gp=0.jpg");
 
-        User user = new User();
-        user.setOpenid(openid);
-        user.setHash(hash);
-        user.setAppName(name.toString());
+        user = new User();
+        user.setOpenId(openid);
+        user.setAppName(name);
         user.setAppPictureUrl(tupianList.get(RandomUtils.getRandNumMax(tupianList.size())));
 
 
-        user.setType(1);
-        user.setFriendManageFlag(0);
-        userService.insertOne(user);
-        log.info("测试登录成功 ，hash值---------" + hash);
+        user.setType((byte) 1);
+        user.setFriendManageFlag((byte)0);
+        userDbClient.save(user);
 
         PersonalCard personalCard = new PersonalCard();
         personalCard.setUserId(user.getId());
         personalCard.setRoomCardNum(0);
 
-        personalCardMapper.insertOne(personalCard);
+        personalCardDbClient.save(personalCard);
 
         return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.HANDLER_SUCCESS);
     }
 
-    @ApiOperation("只需点一下就可以登录了，转到/api/login/user获取用户信息")
-    @RequestMapping(value = "/api/testLogin/login", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public JsonEntity<TestLogin> weixinAuth(){
-        String openid = System.currentTimeMillis() + "";
-        String hash = RandomUtils.getRandomChars(20);
-
-        List<String> tupianList = Lists.newArrayList();
-        tupianList.add("http://hbimg.b0.upaiyun.com/fc4285d30a2d667304b9ef3c0d820b97a6e402933669d-QfsNiI_fw658");
-        tupianList.add("http://pic31.nipic.com/20130725/2929309_105611417128_2.jpg");
-        tupianList.add("http://img3.imgtn.bdimg.com/it/u=4098886459,2746584588&fm=26&gp=0.jpg");
-        tupianList.add("http://img3.imgtn.bdimg.com/it/u=809705136,1148759487&fm=26&gp=0.jpg");
-        tupianList.add("http://img5.imgtn.bdimg.com/it/u=3275347102,446490913&fm=26&gp=0.jpg");
-
-        User user = new User();
-        user.setOpenid(openid);
-        user.setHash(hash);
-        user.setAppName(RandomUtils.getRandNum());
-        user.setAppPictureUrl(tupianList.get(RandomUtils.getRandNumMax(tupianList.size())));
-
-        user.setType(1);
-        user.setFriendManageFlag(0);
-        userService.insertOne(user);
-        log.info("测试登录成功 ，hash值---------" + hash);
-
-        PersonalCard personalCard = new PersonalCard();
-        personalCard.setUserId(user.getId());
-        personalCard.setRoomCardNum(0);
-
-        personalCardMapper.insertOne(personalCard);
-
-
-        Map<String, Object> claims = Maps.newHashMap();
-        claims.put("openid" ,openid);
-        claims.put("hash" ,hash);
+    @ApiOperation("根据手机号登陆")
+    @RequestMapping(value = "/api/login/phoneNum/{phoneNum}", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonEntity<String> login(@PathVariable String phoneNum){
+        User user = userDbClient.findByPhoneNum(phoneNum).getData();
+        if (user == null) {
+            return ResponseHelper.withErrorInstance(MessageCodeEnum.NAME_NOT_EXISTS);
+        }
+        Map<String,Object> claims = new HashMap<>(2<<4);
+        claims.put("userid" ,user.getId());
+        claims.put("openid" ,user.getOpenId());
         claims.put("timestamp" ,System.currentTimeMillis());
         String token = TokenUtil.generateToken(claims);
 
-        TestLogin testLogin = new TestLogin();
-        testLogin.setToken(token);
-        testLogin.setUserId(user.getId());
-        return ResponseHelper.createInstance(testLogin , MessageCodeEnum.HANDLER_SUCCESS);
+        //存入redis，过期时间为7天
+        redisService.setValueWithExpire("acess_token:" + token ,String.valueOf(System.currentTimeMillis())
+                ,7 * 24 * 60 * 60L , TimeUnit.MILLISECONDS);
+        return ResponseHelper.createInstance(token , MessageCodeEnum.HANDLER_SUCCESS);
     }
 
 

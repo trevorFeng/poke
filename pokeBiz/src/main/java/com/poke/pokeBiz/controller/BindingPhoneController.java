@@ -1,17 +1,14 @@
-package com.poke.pokeAuth.controller;
+package com.poke.pokeBiz.controller;
 
 
 import com.poke.common.bean.bo.JsonEntity;
 import com.poke.common.bean.bo.ResponseHelper;
 import com.poke.common.bean.domain.mysql.User;
 import com.poke.common.bean.enums.MessageCodeEnum;
-import com.poke.pokeAuth.bo.PhoneCode;
-import com.poke.pokeAuth.service.BindingPhoneService;
-import com.poke.pokeAuth.service.BrowserLoginService;
-import com.poke.pokeAuth.service.RedisService;
-import com.trevor.auth.bo.PhoneCode;
-import com.trevor.common.domain.mysql.User;
-import com.trevor.common.util.ThreadLocalUtil;
+import com.poke.common.core.UserContextHolder;
+import com.poke.pokeBiz.bo.PhoneCode;
+import com.poke.pokeBiz.service.BindingPhoneService;
+import com.poke.pokeBiz.service.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -37,12 +34,6 @@ import java.util.concurrent.TimeUnit;
 public class BindingPhoneController {
 
     @Resource
-    private HttpServletRequest request;
-
-    @Resource
-    private BrowserLoginService browserLoginService;
-
-    @Resource
     private BindingPhoneService bindingPhoneService;
 
     @Resource
@@ -53,7 +44,7 @@ public class BindingPhoneController {
     @ApiImplicitParam(name = "phoneNum" ,value = "phoneNum" , required = true ,paramType = "path" ,dataType = "string")
     @RequestMapping(value = "/api/binding/phone/{phoneNum}", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<String> bindPhoneNum(@PathVariable("phoneNum") @Pattern(regexp = "^[0-9]{11}$" ,message = "手机号格式不正确") String phoneNum){
-        JsonEntity<String> stringJsonEntity = browserLoginService.generatePhoneCode(phoneNum);
+        JsonEntity<String> stringJsonEntity = bindingPhoneService.generatePhoneCode(phoneNum);
         if (stringJsonEntity.getCode() < 0) {
 
             return stringJsonEntity;
@@ -74,9 +65,8 @@ public class BindingPhoneController {
             return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.CODE_EXPIRE);
         }
         if (Objects.equals(code ,phoneCode.getCode())) {
-            User user = ThreadLocalUtil.getInstance().getUserInfo();
+            User user = UserContextHolder.currentUser();
             JsonEntity<String> stringJsonEntity = bindingPhoneService.bindingPhone(user.getId(), phoneCode.getPhoneNum());
-            ThreadLocalUtil.getInstance().remove();
             return stringJsonEntity;
         }else {
             return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.CODE_ERROR);

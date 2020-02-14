@@ -1,22 +1,18 @@
-package com.poke.dbservice;
+package com.poke.pokeAuth;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.poke.pokeAuth","com.poke.common.client"})
 @EnableEurekaClient
 @EnableFeignClients
-@MapperScan("com.poke.dbservice.dao.mysql")
-@EnableMongoRepositories(basePackages = {"com.poke.dbservice.dao.mongo"})
-public class DbserviceApplication {
+public class PokeAuthApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DbserviceApplication.class, args);
+        SpringApplication.run(PokeAuthApplication.class, args);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.poke.dbservice.dao.mongo;
 
-import com.poke.common.bean.domain.mongo.PlayerResult;
+import com.poke.dbservice.domain.PlayerResult;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;

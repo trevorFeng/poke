@@ -1,4 +1,4 @@
-package com.poke.pokeAuth.service;
+package com.poke.pokeBiz.service;
 
 import com.poke.common.bean.bo.JsonEntity;
 import com.poke.common.bean.bo.ResponseHelper;
@@ -7,6 +7,7 @@ import com.poke.common.bean.enums.MessageCodeEnum;
 import com.poke.common.client.UserDbClient;
 import com.poke.common.util.GetMessageCodeUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Objects;
@@ -16,7 +17,7 @@ import java.util.Objects;
  * @date 03/22/19 13:15
  */
 @Service
-public class BrowserLoginService{
+public class BindingPhoneService {
 
     @Resource
     private UserDbClient userDbClient;
@@ -40,12 +41,17 @@ public class BrowserLoginService{
     }
 
     /**
-     * 查询用户
+     * 绑定手机号
+     * @param userId
      * @param phoneNum
      * @return
      */
-    public User getUserHashAndOpenidByPhoneNum(String phoneNum) {
-        User user = userDbClient.findByPhoneNum(phoneNum).getData();
-        return user;
+    @Transactional(rollbackFor = Exception.class)
+    public JsonEntity<String> bindingPhone(Integer userId, String phoneNum) {
+        User user = new User();
+        user.setId(userId);
+        user.setPhoneNumber(phoneNum);
+        userDbClient.updateUser(user);
+        return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.BINDING_SUCCESS);
     }
 }

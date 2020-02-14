@@ -49,6 +49,27 @@
         from user
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="countByOpenid" resultType="java.lang.Long">
+        select
+        count(*)
+        from user
+        where open_id=#{openid ,jdbcType=VARCHAR}
+
+    </select>
+    <select id="countByPhone" resultType="java.lang.Long">
+        select
+        count(*)
+        from user
+        where phone_number=#{phoneNum ,jdbcType=VARCHAR}
+
+    </select>
+    <select id="findByPhoneNum" resultType="com.poke.common.bean.domain.mysql.User">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where phone_num = #{phoneNum,jdbcType=INTEGER}
+
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user

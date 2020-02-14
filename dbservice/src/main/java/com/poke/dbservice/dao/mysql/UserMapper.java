@@ -10,7 +10,13 @@ import java.util.List;
 @Repository
 public interface UserMapper {
 
+    Long countByPhone(String phoneNum);
+
+    Long countByOpenid(String openid);
+
     User findByOpenidAndUserId(String openid ,Integer userId);
+
+    User findByPhoneNum(String phoneNum);
 
     /**
      * 根据id集合查询用户

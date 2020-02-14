@@ -20,4 +20,6 @@ public interface RoomDbClient {
     @RequestMapping(value = "/api/room/save" ,method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     JsonEntity<Integer> save(@RequestBody Room room);
 
+    JsonEntity<Object> updateStatus();
+
 }

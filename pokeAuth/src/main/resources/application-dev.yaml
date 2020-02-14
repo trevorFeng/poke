@@ -3,11 +3,33 @@ server:
 
 spring:
   application:
-    name: auth
+    name: auth-service
 
-
-  profiles:
-    include: common_util_dev
+  redis:
+    host: 120.79.184.105
+    port: 6379
+    # REDIS (RedisProperties)
+    # Redis数据库索引（默认为0）
+    database: 1
+    # Redis服务器连接密码（默认为空）
+    #    password:
+    # 连接池最大连接数（使用负值表示没有限制）
+    # 连接超时时间（毫秒）
+    timeout: 500
+    jedis:
+      pool:
+        max-active: 20
+        max-wait: -1
+        max-idle: 20
+        min-idle: 0
+    #    pool:
+  #      max-active: 8
+  #      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+  #      max-wait: -1
+  #      # 连接池中的最大空闲连接
+  #      max-idle: 8
+  #      # 连接池中的最小空闲连接
+  #      min-idle: 0
 
 eureka:
   client:
@@ -15,21 +37,6 @@ eureka:
       defaultZone: http://localhost:9000/eureka/
 
   instance:
-    instance-id: 网关服务-9001
+    instance-id: 授权服务-9002
     prefer-ip-address: true
 
-zuul:
-  routes:
-    auth:
-      path: /auth/**
-      serviceId: service-auth
-    general:
-      path: /general/**
-      serviceId: service-general
-    play:
-      path: /play/**
-      serviceId: service-play
-
-ribbon:
-  eureka:
-    enabled: false #禁止使用Eureka中集成的负载均衡

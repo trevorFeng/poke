@@ -23,7 +23,7 @@ public class SelectZhuangJiaEvent extends BaseEvent implements Event {
     @Override
     public void execute(RoomData roomData, Task task) {
         NiuniuData data = (NiuniuData) roomData;
-        String rungingNum = data.getRuningNum();
+        Integer rungingNum = data.getRuningNum();
         Integer roomId = data.getRoomId();
         Set<Integer> players = data.getPlayers();
         //防止多次计算庄家

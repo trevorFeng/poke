@@ -130,12 +130,12 @@ public class SocketResult {
     /**
      * 玩家的5张牌
      */
-    private Map<String ,List<String>> userPokeMap_5;
+    private Map<Integer ,List<String>> userPokeMap_5;
 
     /**
      * 抢庄的玩家
      */
-    private Map<String ,Integer> qiangZhuangMap;
+    private Map<Integer ,Integer> qiangZhuangMap;
 
     /**
      * 用于控制前端抢庄的转圈的显示效果,有2个以上的值就转圈
@@ -145,7 +145,7 @@ public class SocketResult {
     /**
      * 庄家的id
      */
-    private String zhuangJiaUserId;
+    private Integer zhuangJiaUserId;
 
     /**
      * 闲家下注的相关信息
@@ -161,12 +161,12 @@ public class SocketResult {
     /**
      * 本局的分数情况
      */
-    private Map<String ,Integer> scoreMap;
+    private Map<Integer ,Integer> scoreMap;
 
     /**
      * 玩家牌型
      */
-    private Map<String ,Integer> paiXing;
+    private Map<Integer ,Integer> paiXing;
 
     /**
      * 5/12这样的信息
@@ -206,7 +206,7 @@ public class SocketResult {
         this.userPokeList_4 = userPokeList_4;
     }
 
-    public SocketResult(Integer head , Map<String ,List<String>> userPokeMap_5) {
+    public SocketResult(Integer head , Map<Integer ,List<String>> userPokeMap_5) {
         this.head = head;
         this.userPokeMap_5 = userPokeMap_5;
     }

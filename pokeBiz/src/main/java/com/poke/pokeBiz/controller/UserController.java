@@ -1,21 +1,20 @@
-package com.poke.pokeAuth.controller;
+package com.poke.pokeBiz.controller;
 
 
 import com.poke.common.bean.bo.JsonEntity;
 import com.poke.common.bean.bo.LoginUser;
-import com.trevor.common.bo.JsonEntity;
-import com.trevor.common.bo.LoginUser;
-import com.trevor.common.bo.ResponseHelper;
-import com.trevor.common.domain.mysql.User;
-import com.trevor.common.enums.MessageCodeEnum;
-import com.trevor.common.service.PersonalCardService;
-import com.trevor.common.service.UserService;
-import com.trevor.common.util.ThreadLocalUtil;
+import com.poke.common.bean.bo.ResponseHelper;
+import com.poke.common.bean.domain.mysql.User;
+import com.poke.common.bean.enums.MessageCodeEnum;
+import com.poke.common.client.PersonalCardDbClient;
+import com.poke.common.core.UserContextHolder;
+import com.poke.pokeBiz.service.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -28,19 +27,19 @@ import javax.annotation.Resource;
  **/
 @Api(value = "登出和获取登录用户" ,description = "登出和获取登录用户")
 @RestController
-public class LoginController {
+public class UserController {
 
     @Resource
-    private UserService userService;
+    private PersonalCardDbClient personalCardDbClient;
 
     @Resource
-    private PersonalCardService personalCardService;
+    private RedisService redisService;
 
     @ApiOperation("获取登录用户")
     @RequestMapping(value = "/api/login/user", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    protected JsonEntity<LoginUser> getLoginUser() {
-        UserContextHolder
-        Integer cardNum = personalCardService.findCardNumByUserId(user.getId());
+    public JsonEntity<LoginUser> getLoginUser() {
+        User user = UserContextHolder.currentUser();
+        Integer cardNum = personalCardDbClient.findCardNumByUserId(user.getId()).getData();
 
         LoginUser loginUser = new LoginUser();
         loginUser.setId(user.getId());
@@ -49,19 +48,14 @@ public class LoginController {
         loginUser.setFriendManageFlag(user.getFriendManageFlag());
         loginUser.setCardNum(cardNum);
 
-        JsonEntity<LoginUser> jsonEntity = ResponseHelper.createInstance(loginUser , MessageCodeEnum.HANDLER_SUCCESS);
-        ThreadLocalUtil.getInstance().remove();
-        return jsonEntity;
+        return ResponseHelper.createInstance(loginUser , MessageCodeEnum.HANDLER_SUCCESS);
     }
 
     @ApiOperation("退出登录")
     @RequestMapping(value = "/api/login/out", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    protected JsonEntity<Object> loginOut() {
-        //删除hash即可
-        User user = ThreadLocalUtil.getInstance().getUserInfo();
-        userService.loginOut(user.getId());
-        JsonEntity<Object> jsonEntity = ResponseHelper.createInstanceWithOutData(MessageCodeEnum.LOGIN_OUT_SUCCESS);
-        ThreadLocalUtil.getInstance().remove();
-        return jsonEntity;
+    public JsonEntity<Object> loginOut(@RequestParam String token) {
+        //删除token
+        redisService.delete("acess_token:" + token);
+        return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.LOGIN_OUT_SUCCESS);
     }
 }

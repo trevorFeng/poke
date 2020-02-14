@@ -1,7 +1,7 @@
 package com.poke.pokeMessage.core;
 
-import com.trevor.message.core.schedule.CountDownImpl;
-import com.trevor.message.core.thread.TaskThread;
+import com.poke.pokeMessage.core.schedule.CountDownImpl;
+import com.poke.pokeMessage.core.thread.TaskThread;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
