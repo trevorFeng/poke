@@ -7,4 +7,4 @@ logging:
   config: classpath:logback-spring.xml
   level:
     root: ERROR
-    com.poke.zuul: DEBUG
+    com.poke.dbservice: DEBUG

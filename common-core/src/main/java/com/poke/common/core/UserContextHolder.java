@@ -5,6 +5,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 public class UserContextHolder {
+
     private static String USER = "user";
 
     public static void set(User user) {

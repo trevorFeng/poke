@@ -33,11 +33,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/user/query/phoneNum/{phoneNum}" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public JsonEntity<User> findByPhoneNum(@PathVariable String phoneNum) {
+    public JsonEntity<User> findByPhoneNum(@PathVariable(value = "phoneNum") String phoneNum) {
         return ResponseHelper.createInstance(userService.findPhoneNum(phoneNum) , MessageCodeEnum.HANDLER_SUCCESS);
     }
 
-    @RequestMapping(value = "/api/user/save" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/api/user/save" ,method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<Object> saveUser(@RequestBody User user){
         userService.saveUser(user);
         return ResponseHelper.createInstanceWithOutData(MessageCodeEnum.HANDLER_SUCCESS);

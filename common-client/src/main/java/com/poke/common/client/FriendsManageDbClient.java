@@ -14,7 +14,7 @@ import java.util.List;
 public interface FriendsManageDbClient {
 
     @RequestMapping(value = "/api/friendsManage/find/userId" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    JsonEntity<List<FriendsManage>> findByUserId(@RequestParam Integer userId);
+    JsonEntity<List<FriendsManage>> findByUserId(@RequestParam(value = "userId") Integer userId);
 
     @RequestMapping(value = "/api/friendsManage/save" ,method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     JsonEntity<Object> save(@RequestBody FriendsManage friendsManage);

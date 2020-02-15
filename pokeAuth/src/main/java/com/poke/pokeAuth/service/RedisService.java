@@ -68,8 +68,8 @@ public class RedisService {
      * @param key
      * @param value
      */
-    public void setValueWithExpire(String key , String value , Long l , TimeUnit timeUnit){
-        stringRedisTemplate.boundValueOps(key).set(value ,l ,timeUnit);
+    public void setValueWithExpire(String key , String value , Long time , TimeUnit timeUnit){
+        stringRedisTemplate.boundValueOps(key).set(value ,time ,timeUnit);
     }
 
     /**

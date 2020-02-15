@@ -3,10 +3,10 @@ server:
 
 spring:
   application:
-    name: zuul-server
+    name: zuul-service
 
   redis:
-    host: 120.79.184.105
+    host: 127.0.0.1
     port: 6379
     # REDIS (RedisProperties)
     # Redis数据库索引（默认为0）
@@ -43,11 +43,15 @@ eureka:
 
 zuul:
   routes:
-    auth:
+    auth-service:
       path: /auth/**
       serviceId: auth-service
 
+    biz-service:
+      path: /biz/**
+      serviceId: biz-service
 
-ribbon:
-  eureka:
-    enabled: false #禁止使用Eureka中集成的负载均衡
+#
+#ribbon:
+#  eureka:
+#    enabled: false #禁止使用Eureka中集成的负载均衡

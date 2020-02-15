@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface RoomDbClient {
 
     @RequestMapping(value = "/api/room/query/{id}" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    JsonEntity<Room> findByRoomId(@PathVariable Integer id);
+    JsonEntity<Room> findByRoomId(@PathVariable(value = "id") Integer id);
 
     @RequestMapping(value = "/api/room/save" ,method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     JsonEntity<Integer> save(@RequestBody Room room);
 
-    JsonEntity<Object> updateStatus();
+    //JsonEntity<Object> updateStatus();
 
 }

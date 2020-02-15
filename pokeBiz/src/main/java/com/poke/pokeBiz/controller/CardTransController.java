@@ -54,7 +54,7 @@ public class CardTransController {
     }
 
     @ApiOperation(value = "查询收到的房卡")
-    @RequestMapping(value = "/api/cardTrans/query/package", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/api/cardTrans/query/package", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonEntity<List<CardTrans>> findRecevedCardRecord(){
         JsonEntity<List<CardTrans>> jsonEntity = cardTransService.findRecevedCardRecord();
         return jsonEntity;

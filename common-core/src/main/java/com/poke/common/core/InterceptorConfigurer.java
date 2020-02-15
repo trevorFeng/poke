@@ -1,6 +1,7 @@
 package com.poke.common.core;
 
 import com.poke.common.core.UserConTextInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -12,6 +13,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class InterceptorConfigurer implements WebMvcConfigurer {
+
+    @Bean
+    public UserConTextInterceptor getUserConTextInterceptor(){
+        return new UserConTextInterceptor();
+    }
 
     /**
      * 请求拦截器，在进入应用时解析token

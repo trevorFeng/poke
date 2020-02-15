@@ -45,11 +45,11 @@ public class RouteFilter extends ZuulFilter {
         //解析token
         Map<String, Object> claims = TokenUtil.getClaimsFromToken(token);
         //String openid = (String) claims.get("openid");
-        String userId = (String) claims.get("userid");
+        Integer userId = (Integer) claims.get("userid");
         //Long timestamp = (Long) claims.get("timestamp");
 
         //构造请求
-        ctx.addZuulRequestHeader("userid" ,userId);
+        ctx.addZuulRequestHeader("userid" ,userId.toString());
         return true;
     }
 }

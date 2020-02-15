@@ -49,7 +49,7 @@ public class TestLoginController {
 
     @ApiOperation("根据手机号注册用户")
     @RequestMapping(value = "/api/zhuCe/phoneNum/{phoneNum}", method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public JsonEntity<Object> zhuCe(@PathVariable String phoneNum){
+    public JsonEntity<Object> zhuCe(@PathVariable(value = "phoneNum") String phoneNum){
         User user = userDbClient.findByPhoneNum(phoneNum).getData();
         if (user != null) {
             return ResponseHelper.withErrorInstance(MessageCodeEnum.NAME_REPEAT);
@@ -69,6 +69,7 @@ public class TestLoginController {
         user = new User();
         user.setOpenId(openid);
         user.setAppName(name);
+        user.setPhoneNumber(phoneNum);
         user.setAppPictureUrl(tupianList.get(RandomUtils.getRandNumMax(tupianList.size())));
 
 

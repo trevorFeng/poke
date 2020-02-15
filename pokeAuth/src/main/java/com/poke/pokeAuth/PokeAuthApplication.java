@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(scanBasePackages = {"com.poke.pokeAuth","com.poke.common.client"})
 @EnableEurekaClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.poke.common.client")
 public class PokeAuthApplication {
 
     public static void main(String[] args) {

@@ -67,7 +67,7 @@
         select
         <include refid="Base_Column_List"/>
         from user
-        where phone_num = #{phoneNum,jdbcType=INTEGER}
+        where phone_number = #{phoneNum,jdbcType=INTEGER}
 
     </select>
 

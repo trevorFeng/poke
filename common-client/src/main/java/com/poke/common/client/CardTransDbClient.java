@@ -21,12 +21,12 @@ public interface CardTransDbClient {
                                          @RequestParam("turnInUserId") Integer turnInUserId ,@RequestParam("turnInUserName") String turnInUserName);
 
     @RequestMapping(value = "/api/cardTrans/cardNum/transNo" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    JsonEntity<Integer> findCardNumByTransNo(@RequestParam String transNo);
+    JsonEntity<Integer> findCardNumByTransNo(@RequestParam(value = "transNo") String transNo);
 
     @RequestMapping(value = "/api/cardTrans/send/cardRecord" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    JsonEntity<List<CardTrans>> findSendCardRecord(@RequestParam Integer userId);
+    JsonEntity<List<CardTrans>> findSendCardRecord(@RequestParam(value = "userId") Integer userId);
 
     @RequestMapping(value = "/api/cardTrans/receved/cardRecord" ,method = RequestMethod.GET ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    JsonEntity<List<CardTrans>> findRecevedCardRecord(@RequestParam Integer turnInUserId);
+    JsonEntity<List<CardTrans>> findRecevedCardRecord(@RequestParam(value = "turnInUserId") Integer turnInUserId);
 
 }
