@@ -1,9 +1,11 @@
 package com.poke.common.bean.domain.mysql;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 @Data
+@NoArgsConstructor
 public class RechargeRecord {
     private Integer id;
 
@@ -29,4 +31,12 @@ public class RechargeRecord {
      */
     private Long time;
 
+    public RechargeRecord(Integer id, Integer userId, Integer rechargeCard, BigDecimal unitPrice, BigDecimal totalPrice, Long time) {
+        this.id = id;
+        this.userId = userId;
+        this.rechargeCard = rechargeCard;
+        this.unitPrice = unitPrice;
+        this.totalPrice = totalPrice;
+        this.time = time;
+    }
 }

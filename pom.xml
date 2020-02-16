@@ -18,6 +18,7 @@
         <module>pokeMessage</module>
         <module>pokeAuth</module>
         <module>zuul</module>
+        <module>pokeAdmin</module>
     </modules>
 
 

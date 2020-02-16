@@ -1,8 +1,10 @@
 package com.poke.common.bean.domain.mysql;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class User {
 
     private Integer id;
@@ -57,4 +59,20 @@ public class User {
      */
     private Byte friendManageFlag;
 
+    public User(Integer id, String realName, String idCard,
+                String openId, String hash, Integer relationUserId,
+                String phoneNumber, String appName, String appPictureUrl,
+                Byte type, Byte friendManageFlag) {
+        this.id = id;
+        this.realName = realName;
+        this.idCard = idCard;
+        this.openId = openId;
+        this.hash = hash;
+        this.relationUserId = relationUserId;
+        this.phoneNumber = phoneNumber;
+        this.appName = appName;
+        this.appPictureUrl = appPictureUrl;
+        this.type = type;
+        this.friendManageFlag = friendManageFlag;
+    }
 }

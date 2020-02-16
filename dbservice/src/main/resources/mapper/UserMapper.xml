@@ -3,7 +3,7 @@
 <mapper namespace="com.poke.dbservice.dao.mysql.UserMapper">
     <resultMap id="BaseResultMap" type="com.poke.common.bean.domain.mysql.User">
         <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
             <arg column="real_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="id_card" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="open_id" jdbcType="VARCHAR" javaType="java.lang.String"/>

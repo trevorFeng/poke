@@ -1,8 +1,10 @@
 package com.poke.common.bean.domain.mysql;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Room {
 
     /**
@@ -40,5 +42,13 @@ public class Room {
      */
     private Integer totalNum;
 
-
+    public Room(Integer id, Long entryTime, Integer roomAuth, Byte status, Byte roomType, Integer runingNum, Integer totalNum) {
+        this.id = id;
+        this.entryTime = entryTime;
+        this.roomAuth = roomAuth;
+        this.status = status;
+        this.roomType = roomType;
+        this.runingNum = runingNum;
+        this.totalNum = totalNum;
+    }
 }

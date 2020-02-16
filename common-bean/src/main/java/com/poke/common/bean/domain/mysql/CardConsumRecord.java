@@ -1,6 +1,7 @@
 package com.poke.common.bean.domain.mysql;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 一句话描述该类作用:【房卡消费记录】
@@ -9,6 +10,7 @@ import lombok.Data;
  * @create: 2019-03-05 0:20
  **/
 @Data
+@NoArgsConstructor
 public class CardConsumRecord {
     private Integer id;
 
@@ -27,4 +29,10 @@ public class CardConsumRecord {
      */
     private Integer consumNum;
 
+    public CardConsumRecord(Integer id, Integer roomId, Integer roomAuth, Integer consumNum) {
+        this.id = id;
+        this.roomId = roomId;
+        this.roomAuth = roomAuth;
+        this.consumNum = consumNum;
+    }
 }

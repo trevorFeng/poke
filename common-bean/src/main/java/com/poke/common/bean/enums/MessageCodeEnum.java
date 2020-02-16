@@ -175,7 +175,7 @@ public enum MessageCodeEnum {
     /**
      * token 错误
      */
-    TOKEN_ERROR(-401 ,"token 错误");
+    TOKEN_ERROR(-401 ,"token is error or empty");
 
 
     private Integer code;

@@ -17,7 +17,7 @@ public class RechargeCard {
     /**
      * 被充值玩家的id
      */
-    private Long userId;
+    private Integer userId;
 
     /**
      * 充值的数量

@@ -1,8 +1,10 @@
 package com.poke.common.bean.domain.mysql;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class UserProposals {
 
     private Integer id;
@@ -22,4 +24,10 @@ public class UserProposals {
      */
     private String fileUrls;
 
+    public UserProposals(Integer id, Integer userId, String message, String fileUrls) {
+        this.id = id;
+        this.userId = userId;
+        this.message = message;
+        this.fileUrls = fileUrls;
+    }
 }

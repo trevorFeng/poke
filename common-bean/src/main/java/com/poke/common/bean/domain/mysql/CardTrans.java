@@ -1,6 +1,7 @@
 package com.poke.common.bean.domain.mysql;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 房卡交易记录
@@ -8,6 +9,7 @@ import lombok.Data;
  * @date 2019/3/4 14:12
  */
 @Data
+@NoArgsConstructor
 public class CardTrans {
 
     private Integer id;
@@ -57,4 +59,16 @@ public class CardTrans {
      */
     private Byte version;
 
+    public CardTrans(Integer id, Integer cardNum, String turnOutUserName, Integer turnOutUserId, String transNum, Long turnOutTime, String turnInUserName, Integer turnInUserId, Long turnInTime, Byte version) {
+        this.id = id;
+        this.cardNum = cardNum;
+        this.turnOutUserName = turnOutUserName;
+        this.turnOutUserId = turnOutUserId;
+        this.transNum = transNum;
+        this.turnOutTime = turnOutTime;
+        this.turnInUserName = turnInUserName;
+        this.turnInUserId = turnInUserId;
+        this.turnInTime = turnInTime;
+        this.version = version;
+    }
 }

@@ -1,6 +1,7 @@
 package com.poke.common.bean.domain.mysql;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 一句话描述该类作用:【个人房卡信息】
@@ -9,6 +10,7 @@ import lombok.Data;
  * @create: 2019-03-05 0:20
  **/
 @Data
+@NoArgsConstructor
 public class PersonalCard {
     private Integer id;
 
@@ -22,4 +24,9 @@ public class PersonalCard {
      */
     private Integer roomCardNum;
 
+    public PersonalCard(Integer id, Integer userId, Integer roomCardNum) {
+        this.id = id;
+        this.userId = userId;
+        this.roomCardNum = roomCardNum;
+    }
 }
